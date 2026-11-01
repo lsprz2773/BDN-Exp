@@ -1,0 +1,246 @@
+{
+  "explainVersion": "1",
+  "queryPlanner": {
+    "namespace": "control_academico.resultados_unidad",
+    "parsedQuery": {
+      "$and": [
+        {
+          "unidad.estado": {
+            "$eq": "cerrada"
+          }
+        },
+        {
+          "cerrado_en": {
+            "$gte": "2026-01-01T00:00:00Z"
+          }
+        }
+      ]
+    },
+    "indexFilterSet": false,
+    "queryHash": "1DF24D25",
+    "planCacheShapeHash": "1DF24D25",
+    "planCacheKey": "0CEB6CB6",
+    "optimizationTimeMillis": 0,
+    "optimizationTimeMicros": 278,
+    "optimizedPipeline": true,
+    "maxIndexedOrSolutionsReached": false,
+    "maxIndexedAndSolutionsReached": false,
+    "maxScansToExplodeReached": false,
+    "prunedSimilarIndexes": false,
+    "winningPlan": {
+      "isCached": false,
+      "stage": "PROJECTION_DEFAULT",
+      "transformBy": {
+        "_id": true,
+        "resultado_id": true,
+        "alumno": {
+          "id": true
+        },
+        "calificacion": {
+          "final": true
+        }
+      },
+      "inputStage": {
+        "stage": "SORT",
+        "sortPattern": {
+          "calificacion.final": -1
+        },
+        "memLimit": 104857600,
+        "limitAmount": 1000,
+        "type": "simple",
+        "inputStage": {
+          "stage": "FETCH",
+          "filter": {
+            "unidad.estado": {
+              "$eq": "cerrada"
+            }
+          },
+          "nss": "control_academico.resultados_unidad",
+          "inputStage": {
+            "stage": "IXSCAN",
+            "nss": "control_academico.resultados_unidad",
+            "keyPattern": {
+              "cerrado_en": 1
+            },
+            "indexName": "idx_cerrado_en",
+            "isMultiKey": false,
+            "multiKeyPaths": {
+              "cerrado_en": []
+            },
+            "isUnique": false,
+            "isSparse": false,
+            "isPartial": false,
+            "indexVersion": 2,
+            "direction": "forward",
+            "indexBounds": {
+              "cerrado_en": [
+                "[\"2026-01-01T00:00:00Z\", {})"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "rejectedPlans": []
+  },
+  "executionStats": {
+    "executionSuccess": true,
+    "nReturned": 1000,
+    "executionTimeMillis": 451,
+    "executionTimeMicros": 451360,
+    "totalKeysExamined": 250141,
+    "totalDocsExamined": 250141,
+    "executionStages": {
+      "isCached": false,
+      "stage": "PROJECTION_DEFAULT",
+      "nReturned": 1000,
+      "executionTimeMillisEstimate": 440,
+      "works": 251143,
+      "advanced": 1000,
+      "needTime": 250142,
+      "needYield": 0,
+      "saveState": 22,
+      "restoreState": 22,
+      "isEOF": 1,
+      "transformBy": {
+        "_id": true,
+        "resultado_id": true,
+        "alumno": {
+          "id": true
+        },
+        "calificacion": {
+          "final": true
+        }
+      },
+      "peakTrackedMemBytes": 0,
+      "inputStage": {
+        "stage": "SORT",
+        "nReturned": 1000,
+        "executionTimeMillisEstimate": 440,
+        "works": 251143,
+        "advanced": 1000,
+        "needTime": 250142,
+        "needYield": 0,
+        "saveState": 22,
+        "restoreState": 22,
+        "isEOF": 1,
+        "sortPattern": {
+          "calificacion.final": -1
+        },
+        "memLimit": 104857600,
+        "limitAmount": 1000,
+        "type": "simple",
+        "totalDataSizeSorted": 999896,
+        "usedDisk": false,
+        "spills": 0,
+        "spilledRecords": 0,
+        "spilledBytes": 0,
+        "spilledDataStorageSize": 0,
+        "peakTrackedMemBytes": 1087784,
+        "inputStage": {
+          "stage": "FETCH",
+          "filter": {
+            "unidad.estado": {
+              "$eq": "cerrada"
+            }
+          },
+          "nReturned": 212641,
+          "executionTimeMillisEstimate": 393,
+          "works": 250142,
+          "advanced": 212641,
+          "needTime": 37500,
+          "needYield": 0,
+          "saveState": 22,
+          "restoreState": 22,
+          "isEOF": 1,
+          "nss": "control_academico.resultados_unidad",
+          "docsExamined": 250141,
+          "alreadyHasObj": 0,
+          "inputStage": {
+            "stage": "IXSCAN",
+            "nReturned": 250141,
+            "executionTimeMillisEstimate": 52,
+            "works": 250142,
+            "advanced": 250141,
+            "needTime": 0,
+            "needYield": 0,
+            "saveState": 22,
+            "restoreState": 22,
+            "isEOF": 1,
+            "nss": "control_academico.resultados_unidad",
+            "keyPattern": {
+              "cerrado_en": 1
+            },
+            "indexName": "idx_cerrado_en",
+            "isMultiKey": false,
+            "multiKeyPaths": {
+              "cerrado_en": []
+            },
+            "isUnique": false,
+            "isSparse": false,
+            "isPartial": false,
+            "indexVersion": 2,
+            "direction": "forward",
+            "indexBounds": {
+              "cerrado_en": [
+                "[\"2026-01-01T00:00:00Z\", {})"
+              ]
+            },
+            "keysExamined": 250141,
+            "seeks": 1,
+            "dupsTested": 0,
+            "dupsDropped": 0,
+            "peakTrackedMemBytes": 0
+          }
+        }
+      }
+    }
+  },
+  "queryShapeHash": "04A0B4BCB8A25814FD86A27F7D52971AA527DC8ED2CCE87228C90D40F20D06DB",
+  "peakTrackedMemBytes": 1087784,
+  "command": {
+    "aggregate": "resultados_unidad",
+    "pipeline": [
+      {
+        "$match": {
+          "unidad.estado": "cerrada",
+          "cerrado_en": {
+            "$gte": "2026-01-01T00:00:00Z"
+          }
+        }
+      },
+      {
+        "$sort": {
+          "calificacion.final": -1
+        }
+      },
+      {
+        "$limit": 1000
+      },
+      {
+        "$project": {
+          "resultado_id": 1,
+          "alumno.id": 1,
+          "calificacion.final": 1
+        }
+      }
+    ],
+    "allowDiskUse": false,
+    "cursor": {},
+    "$db": "control_academico"
+  },
+  "serverInfo": {
+    "host": "2b7bdbb99754",
+    "port": 27017,
+    "version": "9.0.4",
+    "gitVersion": "64ade602b836c9adeffba7fa038c887ffab56196"
+  },
+  "serverParameters": {
+    "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+    "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+    "internalQueryProhibitBlockingMergeOnMongoS": 0,
+    "internalQueryFrameworkControl": "trySbeRestricted",
+    "internalQueryPlannerIgnoreIndexWithCollationForRegex": 1
+  },
+  "ok": 1
+}

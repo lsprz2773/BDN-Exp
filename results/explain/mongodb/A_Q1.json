@@ -1,0 +1,205 @@
+{
+  "explainVersion": "1",
+  "stages": [
+    {
+      "$cursor": {
+        "queryPlanner": {
+          "namespace": "control_academico.resultados_unidad",
+          "parsedQuery": {},
+          "indexFilterSet": false,
+          "queryHash": "1871CF05",
+          "planCacheShapeHash": "1871CF05",
+          "planCacheKey": "5922DEFD",
+          "optimizationTimeMillis": 1,
+          "optimizationTimeMicros": 1384,
+          "cursorType": "regular",
+          "maxIndexedOrSolutionsReached": false,
+          "maxIndexedAndSolutionsReached": false,
+          "maxScansToExplodeReached": false,
+          "prunedSimilarIndexes": false,
+          "winningPlan": {
+            "isCached": false,
+            "stage": "PROJECTION_DEFAULT",
+            "transformBy": {
+              "calificacion.desglose": 1,
+              "contexto.materia.nombre": 1,
+              "_id": 0
+            },
+            "inputStage": {
+              "stage": "COLLSCAN",
+              "nss": "control_academico.resultados_unidad",
+              "direction": "forward"
+            }
+          },
+          "rejectedPlans": []
+        },
+        "executionStats": {
+          "executionSuccess": true,
+          "nReturned": 500000,
+          "executionTimeMillis": 2184,
+          "executionTimeMicros": 2184914,
+          "totalKeysExamined": 0,
+          "totalDocsExamined": 500000,
+          "executionStages": {
+            "isCached": false,
+            "stage": "PROJECTION_DEFAULT",
+            "nReturned": 500000,
+            "executionTimeMillisEstimate": 541,
+            "works": 500001,
+            "advanced": 500000,
+            "needTime": 0,
+            "needYield": 0,
+            "saveState": 154,
+            "restoreState": 153,
+            "isEOF": 1,
+            "transformBy": {
+              "calificacion.desglose": 1,
+              "contexto.materia.nombre": 1,
+              "_id": 0
+            },
+            "peakTrackedMemBytes": 0,
+            "inputStage": {
+              "stage": "COLLSCAN",
+              "nReturned": 500000,
+              "executionTimeMillisEstimate": 357,
+              "works": 500001,
+              "advanced": 500000,
+              "needTime": 0,
+              "needYield": 0,
+              "saveState": 154,
+              "restoreState": 153,
+              "isEOF": 1,
+              "nss": "control_academico.resultados_unidad",
+              "direction": "forward",
+              "docsExamined": 500000,
+              "seeks": 0
+            }
+          }
+        }
+      },
+      "nReturned": 500000,
+      "executionTimeMillisEstimate": 829
+    },
+    {
+      "$unwind": {
+        "path": "$calificacion.desglose"
+      },
+      "nReturned": 1500160,
+      "executionTimeMillisEstimate": 1139
+    },
+    {
+      "$match": {
+        "calificacion.desglose.promedio": {
+          "$gt": 6
+        }
+      },
+      "nReturned": 974583,
+      "executionTimeMillisEstimate": 1527,
+      "expressionEvaluationPeakMemoryBytes": 512
+    },
+    {
+      "$group": {
+        "_id": {
+          "materia": "$contexto.materia.nombre",
+          "criterio": "$calificacion.desglose.criterio"
+        },
+        "total_aporte": {
+          "$sum": {
+            "$multiply": [
+              "$calificacion.desglose.porcentaje",
+              "$calificacion.desglose.promedio"
+            ]
+          }
+        },
+        "avg_aporte": {
+          "$avg": {
+            "$multiply": [
+              "$calificacion.desglose.porcentaje",
+              "$calificacion.desglose.promedio"
+            ]
+          }
+        },
+        "count": {
+          "$sum": {
+            "$const": 1
+          }
+        },
+        "$willBeMerged": false
+      },
+      "nReturned": 180,
+      "executionTimeMillisEstimate": 2167,
+      "maxAccumulatorMemoryUsageBytes": {
+        "total_aporte": 36000,
+        "avg_aporte": 31680,
+        "count": 36000
+      },
+      "totalOutputDataSizeBytes": 105090,
+      "usedDisk": false,
+      "spills": 0,
+      "spilledDataStorageSize": 0,
+      "spilledBytes": 0,
+      "spilledRecords": 0,
+      "peakTrackedMemBytes": 127770
+    }
+  ],
+  "queryShapeHash": "EA6BCCD2B43F37339E988EA45A256DA89D21BA87D39A303D1D9276F3F9B03C37",
+  "peakTrackedMemBytes": 128282,
+  "serverInfo": {
+    "host": "2b7bdbb99754",
+    "port": 27017,
+    "version": "9.0.4",
+    "gitVersion": "64ade602b836c9adeffba7fa038c887ffab56196"
+  },
+  "serverParameters": {
+    "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+    "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+    "internalQueryProhibitBlockingMergeOnMongoS": 0,
+    "internalQueryFrameworkControl": "trySbeRestricted",
+    "internalQueryPlannerIgnoreIndexWithCollationForRegex": 1
+  },
+  "command": {
+    "aggregate": "resultados_unidad",
+    "pipeline": [
+      {
+        "$unwind": "$calificacion.desglose"
+      },
+      {
+        "$match": {
+          "calificacion.desglose.promedio": {
+            "$gt": 6
+          }
+        }
+      },
+      {
+        "$group": {
+          "_id": {
+            "materia": "$contexto.materia.nombre",
+            "criterio": "$calificacion.desglose.criterio"
+          },
+          "total_aporte": {
+            "$sum": {
+              "$multiply": [
+                "$calificacion.desglose.porcentaje",
+                "$calificacion.desglose.promedio"
+              ]
+            }
+          },
+          "avg_aporte": {
+            "$avg": {
+              "$multiply": [
+                "$calificacion.desglose.porcentaje",
+                "$calificacion.desglose.promedio"
+              ]
+            }
+          },
+          "count": {
+            "$sum": 1
+          }
+        }
+      }
+    ],
+    "cursor": {},
+    "$db": "control_academico"
+  },
+  "ok": 1
+}

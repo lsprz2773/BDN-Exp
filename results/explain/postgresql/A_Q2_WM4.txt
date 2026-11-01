@@ -1,0 +1,20 @@
+Limit  (cost=92189.57..92306.04 rows=1000 width=96) (actual time=115.040..116.950 rows=1000.00 loops=1)
+  Buffers: shared hit=356 read=86186
+  ->  Gather Merge  (cost=92189.57..92332.36 rows=1226 width=96) (actual time=115.039..116.895 rows=1000.00 loops=1)
+        Workers Planned: 2
+        Workers Launched: 2
+        Buffers: shared hit=356 read=86186
+        ->  Sort  (cost=91189.55..91190.83 rows=511 width=96) (actual time=113.324..113.351 rows=665.67 loops=3)
+              Sort Key: ((((data -> 'calificacion'::text) ->> 'final'::text))::numeric) DESC
+              Sort Method: top-N heapsort  Memory: 272kB
+              Buffers: shared hit=356 read=86186
+              Worker 0:  Sort Method: top-N heapsort  Memory: 274kB
+              Worker 1:  Sort Method: top-N heapsort  Memory: 272kB
+              ->  Parallel Seq Scan on resultados_unidad  (cost=0.00..91166.56 rows=511 width=96) (actual time=0.151..100.227 rows=70880.33 loops=3)
+                    Filter: (((data ->> 'cerrado_en'::text) >= '2026-01-01T00:00:00Z'::text) AND (((data -> 'unidad'::text) ->> 'estado'::text) = 'cerrada'::text))
+                    Rows Removed by Filter: 95786
+                    Buffers: shared hit=282 read=86186
+Planning:
+  Buffers: shared hit=126
+Planning Time: 0.275 ms
+Execution Time: 117.058 ms

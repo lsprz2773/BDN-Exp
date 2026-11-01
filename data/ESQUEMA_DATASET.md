@@ -67,7 +67,7 @@
 | `calificacion.desglose[]` | 2 | arreglo | **nuevo** (congelado por RN-18) | 2–4 elementos, promedio 3 |
 | `….criterio` | 3 | texto | `criterios_evaluacion.nombre` | Examen, Tareas, Exposición, Entregable, Proyecto, Participación; sin repetir dentro del documento |
 | `….porcentaje` | 3 | int | `criterios_evaluacion.porcentaje` | **Suman 100** dentro del documento (RN-11) |
-| `….promedio` | 3 | numérico (1 decimal) | calculado de `entregas` | 0–10, media ~7,5: **~65 % > 6** (filtro de Q1) |
+| `….promedio` | 3 | numérico (1 decimal) | calculado de `entregas` | Normal(7,2; 3,0) recortada a 0–10 (media real 6,93): **65,0 % > 6** (filtro de Q1) |
 | `….actividades_entregadas` | 3 | int | conteo de `entregas` | 0 … `actividades_totales` |
 | `….actividades_totales` | 3 | int | conteo de `actividades` | 1–10 (RN-22: máx. 40 por unidad) |
 | `asistencias.presente` / `ausente` / `justificado` | 2 | int | `asistencias` | Suman 15–25 sesiones por unidad |

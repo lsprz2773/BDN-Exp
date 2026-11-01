@@ -1,0 +1,38 @@
+Suite C | PRUEBA | partes ['B', 'C'] | 18 corridas | ventanas 5/20/5 s
+[1/18] C:MONGO:Q1:c1:r1 ... ok | qps=0.4 p99=4885.73 thr=5.42 rss=462.2
+[2/18] C:MONGO:Q1:c10:r1 ... error | qps=0.0 p99= thr=207.685 rss=531.6
+[3/18] C:MONGO:Q1:c50:r1 ... error | qps=0.0 p99= thr=233.902 rss=496.9
+[4/18] C:MONGO:Q2_DISK0:c1:r1 ... ok | qps=0.15 p99=8616.01 thr=9.206 rss=633.5
+[5/18] C:MONGO:Q2_DISK0:c10:r1 ... error | qps=0.0 p99= thr=112.547 rss=627.0
+[6/18] C:MONGO:Q2_DISK0:c50:r1 ... error | qps=0.0 p99= thr=150.865 rss=632.9
+[7/18] C:MONGO:Q2_DISK1:c1:r1 ... ok | qps=0.15 p99=7763.82 thr=8.069 rss=647.3
+[8/18] C:MONGO:Q2_DISK1:c10:r1 ... error | qps=0.0 p99= thr=111.57 rss=647.4
+[9/18] C:MONGO:Q2_DISK1:c50:r1 ... error | qps=0.0 p99= thr=148.089 rss=638.3
+[10/18] C:PG:Q1:c1:r1 ... spill | qps=0.05 p99=17473.44 thr=4.774 rss=98.1
+[11/18] C:PG:Q1:c10:r1 ... error | qps=0.0 p99= thr=104.765 rss=517.0
+[12/18] C:PG:Q1:c50:r1 ... Traceback (most recent call last):
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/run_matrix.py", line 130, in main
+    fila, notas = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 189, in ejecutar_corrida
+    thr0, spill0 = metrics.throttled_seconds(nombre), leer_spill()
+                                                      ^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 182, in <lambda>
+    leer_spill = lambda: metrics.spill_pg(clientes[0].conn)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/metrics.py", line 88, in spill_pg
+    with conn.cursor() as cur:
+         ^^^^^^^^^^^^^
+  File "/home/luis27/.venvs/bdn/lib/python3.12/site-packages/psycopg/connection.py", line 244, in cursor
+    self._check_connection_ok()
+  File "/home/luis27/.venvs/bdn/lib/python3.12/site-packages/psycopg/_connection_base.py", line 539, in _check_connection_ok
+    raise e.OperationalError("the connection is closed")
+psycopg.OperationalError: the connection is closed
+error | qps= p99= thr= rss=
+[13/18] C:PG:Q2_WM4:c1:r1 ... oom | qps=1.0 p99=1666.33 thr=78.793 rss=10.8
+[14/18] C:PG:Q2_WM4:c10:r1 ... oom | qps=0.35 p99=12671.05 thr=150.398 rss=39.5
+[15/18] C:PG:Q2_WM4:c50:r1 ... oom | qps=0.0 p99= thr=147.262 rss=119.1
+[16/18] C:PG:Q2_WM64:c1:r1 ... oom | qps=0.45 p99=4970.9 thr=69.629 rss=12.9
+[17/18] C:PG:Q2_WM64:c10:r1 ... oom | qps=0.0 p99= thr=110.222 rss=37.3
+[18/18] C:PG:Q2_WM64:c50:r1 ... oom | qps=0.0 p99= thr=131.49 rss=119.1
+Fin de la suite

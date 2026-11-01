@@ -1,0 +1,146 @@
+Suite B | PRUEBA | partes ['B', 'C'] | 18 corridas | ventanas 5/20/5 s
+[1/18] B:MONGO:Q1:c1:r1 ... ok | qps=0.5 p99=1660.12 thr=0.523 rss=725.6
+[2/18] B:MONGO:Q1:c10:r1 ... error | qps=0.0 p99= thr=182.053 rss=738.2
+[3/18] B:MONGO:Q1:c50:r1 ... error | qps=0.0 p99= thr=208.335 rss=756.8
+[4/18] B:MONGO:Q2_DISK0:c1:r1 ... ok | qps=0.5 p99=4546.59 thr=0.667 rss=833.1
+[5/18] B:MONGO:Q2_DISK0:c10:r1 ... ok | qps=0.5 p99=11992.71 thr=119.023 rss=844.9
+[6/18] B:MONGO:Q2_DISK0:c50:r1 ... error | qps=0.0 p99= thr=168.494 rss=870.0
+[7/18] B:MONGO:Q2_DISK1:c1:r1 ... ok | qps=0.6 p99=4219.07 thr=0.626 rss=723.9
+[8/18] B:MONGO:Q2_DISK1:c10:r1 ... ok | qps=0.5 p99=14967.73 thr=127.58 rss=879.8
+[9/18] B:MONGO:Q2_DISK1:c50:r1 ... error | qps=0.0 p99= thr=157.357 rss=873.4
+[10/18] B:PG:Q1:c1:r1 ... Traceback (most recent call last):
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/run_matrix.py", line 130, in main
+    fila, notas = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 177, in ejecutar_corrida
+    clientes = [Cliente(env, qid) for _ in range(concurrencia)]
+                ^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 91, in __init__
+    self.conn = psycopg.connect(
+                ^^^^^^^^^^^^^^^^
+  File "/home/luis27/.venvs/bdn/lib/python3.12/site-packages/psycopg/connection.py", line 126, in connect
+    raise last_ex.with_traceback(None)
+psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 54302 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+error | qps= p99= thr= rss=
+[11/18] B:PG:Q1:c10:r1 ... Traceback (most recent call last):
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/run_matrix.py", line 130, in main
+    fila, notas = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 177, in ejecutar_corrida
+    clientes = [Cliente(env, qid) for _ in range(concurrencia)]
+                ^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 91, in __init__
+    self.conn = psycopg.connect(
+                ^^^^^^^^^^^^^^^^
+  File "/home/luis27/.venvs/bdn/lib/python3.12/site-packages/psycopg/connection.py", line 126, in connect
+    raise last_ex.with_traceback(None)
+psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 54302 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+error | qps= p99= thr= rss=
+[12/18] B:PG:Q1:c50:r1 ... Traceback (most recent call last):
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/run_matrix.py", line 130, in main
+    fila, notas = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 177, in ejecutar_corrida
+    clientes = [Cliente(env, qid) for _ in range(concurrencia)]
+                ^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 91, in __init__
+    self.conn = psycopg.connect(
+                ^^^^^^^^^^^^^^^^
+  File "/home/luis27/.venvs/bdn/lib/python3.12/site-packages/psycopg/connection.py", line 126, in connect
+    raise last_ex.with_traceback(None)
+psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 54302 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+error | qps= p99= thr= rss=
+[13/18] B:PG:Q2_WM4:c1:r1 ... Traceback (most recent call last):
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/run_matrix.py", line 130, in main
+    fila, notas = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 177, in ejecutar_corrida
+    clientes = [Cliente(env, qid) for _ in range(concurrencia)]
+                ^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 91, in __init__
+    self.conn = psycopg.connect(
+                ^^^^^^^^^^^^^^^^
+  File "/home/luis27/.venvs/bdn/lib/python3.12/site-packages/psycopg/connection.py", line 126, in connect
+    raise last_ex.with_traceback(None)
+psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 54302 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+error | qps= p99= thr= rss=
+[14/18] B:PG:Q2_WM4:c10:r1 ... Traceback (most recent call last):
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/run_matrix.py", line 130, in main
+    fila, notas = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 177, in ejecutar_corrida
+    clientes = [Cliente(env, qid) for _ in range(concurrencia)]
+                ^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 91, in __init__
+    self.conn = psycopg.connect(
+                ^^^^^^^^^^^^^^^^
+  File "/home/luis27/.venvs/bdn/lib/python3.12/site-packages/psycopg/connection.py", line 126, in connect
+    raise last_ex.with_traceback(None)
+psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 54302 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+error | qps= p99= thr= rss=
+[15/18] B:PG:Q2_WM4:c50:r1 ... Traceback (most recent call last):
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/run_matrix.py", line 130, in main
+    fila, notas = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 177, in ejecutar_corrida
+    clientes = [Cliente(env, qid) for _ in range(concurrencia)]
+                ^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 91, in __init__
+    self.conn = psycopg.connect(
+                ^^^^^^^^^^^^^^^^
+  File "/home/luis27/.venvs/bdn/lib/python3.12/site-packages/psycopg/connection.py", line 126, in connect
+    raise last_ex.with_traceback(None)
+psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 54302 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+error | qps= p99= thr= rss=
+[16/18] B:PG:Q2_WM64:c1:r1 ... Traceback (most recent call last):
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/run_matrix.py", line 130, in main
+    fila, notas = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 177, in ejecutar_corrida
+    clientes = [Cliente(env, qid) for _ in range(concurrencia)]
+                ^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 91, in __init__
+    self.conn = psycopg.connect(
+                ^^^^^^^^^^^^^^^^
+  File "/home/luis27/.venvs/bdn/lib/python3.12/site-packages/psycopg/connection.py", line 126, in connect
+    raise last_ex.with_traceback(None)
+psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 54302 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+error | qps= p99= thr= rss=
+[17/18] B:PG:Q2_WM64:c10:r1 ... Traceback (most recent call last):
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/run_matrix.py", line 130, in main
+    fila, notas = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 177, in ejecutar_corrida
+    clientes = [Cliente(env, qid) for _ in range(concurrencia)]
+                ^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 91, in __init__
+    self.conn = psycopg.connect(
+                ^^^^^^^^^^^^^^^^
+  File "/home/luis27/.venvs/bdn/lib/python3.12/site-packages/psycopg/connection.py", line 126, in connect
+    raise last_ex.with_traceback(None)
+psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 54302 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+error | qps= p99= thr= rss=
+[18/18] B:PG:Q2_WM64:c50:r1 ... Traceback (most recent call last):
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/run_matrix.py", line 130, in main
+    fila, notas = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 177, in ejecutar_corrida
+    clientes = [Cliente(env, qid) for _ in range(concurrencia)]
+                ^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/luis3/Desktop/Universidad N/7mo/BDELN/ProyectoExperimento/runner/benchmark_runner.py", line 91, in __init__
+    self.conn = psycopg.connect(
+                ^^^^^^^^^^^^^^^^
+  File "/home/luis27/.venvs/bdn/lib/python3.12/site-packages/psycopg/connection.py", line 126, in connect
+    raise last_ex.with_traceback(None)
+psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 54302 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+error | qps= p99= thr= rss=
+Fin de la suite

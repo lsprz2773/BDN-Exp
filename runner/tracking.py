@@ -6,6 +6,7 @@
 
 Las escrituras se serializan con un lock de archivo porque dos suites corren a la vez.
 En modo prueba se escriben copias en results/prueba/ y no se toca el control de matriz.
+seguimiento/ no está en el repo: en un clon nuevo los tres archivos se crean al vuelo.
 """
 import fcntl
 import re
@@ -21,14 +22,14 @@ LOCK = ROOT / "results" / "logs" / ".tracking.lock"
 MARCA = {"ok": "✔", "spill": "⚠", "oom": "✖", "error": "✖"}
 MOTOR_CORTO = {"mongodb": "MONGO", "postgresql": "PG"}
 
-PLANTILLA_BITACORA = """# BITÁCORA DE LA SUITE DE PRUEBA
+PLANTILLA_BITACORA = """# BITÁCORA DE {titulo}
 
 ## Corridas
 
 | Fecha/hora inicio | Fecha/hora fin | Ronda | Suite | Motor | Perfil | query_id | Conc. | Rep. | status | QPS | P99 (ms) | Throttled (s) | Max RSS (MB) | Notas |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 """
-PLANTILLA_ERRORES = """# ERRORES DE LA SUITE DE PRUEBA
+PLANTILLA_ERRORES = """# ERRORES DE {titulo}
 
 ## Errores abiertos o en corrección
 
@@ -71,15 +72,43 @@ def _insertar_en_tabla(ruta, encabezado, fila):
 
 
 def _archivos(prueba):
-    if not prueba:
-        return SEGUIMIENTO / "BITACORA_EJECUCION.md", SEGUIMIENTO / "ESTATUS_ERRORES.md"
-    PRUEBA.mkdir(parents=True, exist_ok=True)
-    bit, err = PRUEBA / "bitacora_prueba.md", PRUEBA / "errores_prueba.md"
+    if prueba:
+        carpeta, bit, err, titulo = PRUEBA, "bitacora_prueba.md", "errores_prueba.md", "LA SUITE DE PRUEBA"
+    else:
+        carpeta, bit, err, titulo = SEGUIMIENTO, "BITACORA_EJECUCION.md", "ESTATUS_ERRORES.md", "EJECUCIÓN"
+    carpeta.mkdir(parents=True, exist_ok=True)
+    bit, err = carpeta / bit, carpeta / err
     if not bit.exists():
-        bit.write_text(PLANTILLA_BITACORA, encoding="utf-8")
+        bit.write_text(PLANTILLA_BITACORA.format(titulo=titulo), encoding="utf-8")
     if not err.exists():
-        err.write_text(PLANTILLA_ERRORES, encoding="utf-8")
+        err.write_text(PLANTILLA_ERRORES.format(titulo=titulo), encoding="utf-8")
     return bit, err
+
+
+def asegurar_control(corridas_por_perfil):
+    """Crea seguimiento/CONTROL_MATRIZ.md si no existe (p. ej. en un clon nuevo del repo).
+    `corridas_por_perfil`: lista ordenada de (motor, qid, conc, rep) de un perfil."""
+    ruta = SEGUIMIENTO / "CONTROL_MATRIZ.md"
+    if ruta.exists():
+        return
+    SEGUIMIENTO.mkdir(parents=True, exist_ok=True)
+    n = len(corridas_por_perfil)
+    partes = ["# CONTROL DE MATRIZ", "",
+              "> Estado: ☐ Pendiente · ✔ ok · ⚠ spill · ✖ oom/error · ↻ Repetir", "",
+              "## Resumen", "", "| Perfil | Ronda | Total | ✔ | ⚠ | ✖ | ↻ | ☐ |",
+              "|---|---|---|---|---|---|---|---|"]
+    partes += [f"| {p} | {r} | {n} | 0 | 0 | 0 | 0 | {n} |" for p, r in (("A", "R2"), ("B", "R1"), ("C", "R1"))]
+    partes.append(f"| **Total** | | **{3 * n}** | 0 | 0 | 0 | 0 | {3 * n} |")
+    i = 0
+    for p in "ABC":
+        partes += ["", f"## Perfil {p}", "",
+                   "| # | ID de corrida | Motor | query_id | Conc. | Rep. | Estado | Fecha/hora | Notas |",
+                   "|---|---|---|---|---|---|---|---|---|"]
+        for motor, qid, conc, rep in corridas_por_perfil:
+            i += 1
+            rid = id_corrida(p, motor, qid, conc, rep)
+            partes.append(f"| {i} | `{rid}` | {MOTOR_CORTO[motor]} | {qid} | {conc} | {rep} | ☐ | | |")
+    ruta.write_text("\n".join(partes) + "\n", encoding="utf-8")
 
 
 def registrar(fila, notas, ronda, perfil, inicio, fin, prueba, falla_real=True):
@@ -123,7 +152,10 @@ def marcar_control(rid, marca, fecha, nota):
 
 
 def estado_control(rid):
-    for linea in (SEGUIMIENTO / "CONTROL_MATRIZ.md").read_text(encoding="utf-8").split("\n"):
+    ruta = SEGUIMIENTO / "CONTROL_MATRIZ.md"
+    if not ruta.exists():
+        return None
+    for linea in ruta.read_text(encoding="utf-8").split("\n"):
         if f"| `{rid}` |" in linea:
             return _celdas(linea)[6]
     return None
@@ -147,6 +179,7 @@ def _recalcular_resumen(texto):
             linea = f"| {m.group(1)} | {m.group(2)} | {m.group(3)} | " + " | ".join(str(c[s]) for s in simbolos) + " |"
         elif linea.startswith("| **Total** |"):
             tot = {s: sum(conteo[p][s] for p in "ABC") for s in simbolos}
-            linea = "| **Total** | | **162** | " + " | ".join(str(tot[s]) for s in simbolos) + " |"
+            total = re.match(r"^\| \*\*Total\*\* \| \| (\*\*\d+\*\*) \|", linea).group(1)
+            linea = f"| **Total** | | {total} | " + " | ".join(str(tot[s]) for s in simbolos) + " |"
         salida.append(linea)
     return "\n".join(salida)

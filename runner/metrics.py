@@ -5,7 +5,7 @@
   si Prometheus no responde, se usa memory.peak de la cgroup.
 - disk_spill: delta de los contadores de spill del motor (pg_stat_database.temp_bytes
   en PostgreSQL; contadores *spill* de serverStatus en MongoDB).
-- oom_killed: State.OOMKilled de docker inspect.
+- oom: delta de oom_kill en memory.events (o el contenedor dejó de correr).
 """
 import json
 import subprocess
@@ -40,6 +40,16 @@ def throttled_seconds(nombre):
         if clave == "throttled_usec":
             return int(valor) / 1e6
     return 0.0
+
+
+def oom_kills(nombre):
+    """Contador oom_kill de memory.events. Docker deja State.OOMKilled en true para siempre
+    tras el primer OOM, así que se usa el delta de este contador por corrida."""
+    for linea in cgroup_file(nombre, "memory.events").splitlines():
+        clave, valor = linea.split()
+        if clave == "oom_kill":
+            return int(valor)
+    return 0
 
 
 def memory_peak_mb(nombre):

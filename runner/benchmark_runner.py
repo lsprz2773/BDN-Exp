@@ -88,13 +88,21 @@ class ClientePG:
     def __init__(self, env, qid):
         base, self.work_mem = VARIANTES["postgresql"][qid]
         self.sql = (QUERIES / "postgresql" / f"{base}.sql").read_text(encoding="utf-8")
+        self.env = env
+        self._conectar()
+
+    def _conectar(self):
         self.conn = psycopg.connect(
-            host="127.0.0.1", port=int(env["PG_PORT"]), dbname=DB, user="bench",
-            password=env["PG_PASSWORD"], autocommit=True, connect_timeout=15)
+            host="127.0.0.1", port=int(self.env["PG_PORT"]), dbname=DB, user="bench",
+            password=self.env["PG_PASSWORD"], autocommit=True, connect_timeout=15)
         if self.work_mem:
             self.conn.execute(f"SET work_mem = '{self.work_mem}'")
 
     def ejecutar(self, restante_s):
+        # Tras un OOM de un backend, PostgreSQL reinicia y cierra todas las sesiones:
+        # el cliente se reconecta, como haría una aplicación real.
+        if self.conn.closed or self.conn.broken:
+            self._conectar()
         ms = max(1, int(restante_s * 1000))
         with self.conn.cursor() as cur:
             cur.execute(f"SET statement_timeout = {ms}")
@@ -166,38 +174,64 @@ def percentil(valores, p):
     return v[i] if i + 1 >= len(v) else v[i] + (v[i + 1] - v[i]) * (k - i)
 
 
+def _lector_spill(motor, env):
+    """Conexión de monitoreo aparte de los clientes medidos; tolera reinicios del motor."""
+    estado = {"cliente": None}
+
+    def leer():
+        try:
+            if motor == "mongodb":
+                if estado["cliente"] is None:
+                    estado["cliente"] = pymongo.MongoClient(
+                        f"mongodb://127.0.0.1:{env['MONGO_PORT']}", serverSelectionTimeoutMS=10000)
+                return metrics.spill_mongo(estado["cliente"])
+            c = estado["cliente"]
+            if c is None or c.closed or c.broken:
+                c = estado["cliente"] = psycopg.connect(
+                    host="127.0.0.1", port=int(env["PG_PORT"]), dbname=DB, user="bench",
+                    password=env["PG_PASSWORD"], autocommit=True, connect_timeout=10)
+            return metrics.spill_pg(c)
+        except (PyMongoError, psycopg.Error):
+            return None
+
+    def cerrar():
+        if estado["cliente"] is not None:
+            estado["cliente"].close()
+
+    return leer, cerrar
+
+
 def ejecutar_corrida(perfil, motor, qid, concurrencia, rep, warmup, duracion, cooldown, ruta_raw):
-    """Devuelve (fila_csv, notas)."""
+    """Devuelve (fila_csv, notas, falla_real). falla_real = hubo algo que corregir o analizar
+    (OOM o fallos distintos de cortes por fin de ventana)."""
     env = perfil_env(perfil)
     nombre = contenedor(perfil, motor)
     cid = metrics.container_id(nombre)
     Cliente = ClienteMongo if motor == "mongodb" else ClientePG
     notas = []
+    leer_spill, cerrar_spill = _lector_spill(motor, env)
+    oom0 = metrics.oom_kills(nombre)
 
     clientes = [Cliente(env, qid) for _ in range(concurrencia)]
     try:
-        if motor == "mongodb":
-            leer_spill = lambda: metrics.spill_mongo(clientes[0].client)
-        else:
-            leer_spill = lambda: metrics.spill_pg(clientes[0].conn)
-
+        fallos_warmup = {}
         if warmup > 0:
-            w = correr_fase(clientes, warmup)
-            if w.fallos:
-                notas.append(f"warmup: {w.fallos}")
+            fallos_warmup = correr_fase(clientes, warmup).fallos
+            if fallos_warmup:
+                notas.append(f"warmup: {fallos_warmup}")
 
         thr0, spill0 = metrics.throttled_seconds(nombre), leer_spill()
         m = correr_fase(clientes, duracion)
         estado = metrics.estado_contenedor(nombre)
         if estado["running"]:
             thr = metrics.throttled_seconds(nombre) - thr0
-            try:
-                spill = leer_spill() > spill0
-            except (PyMongoError, psycopg.Error):
-                spill = None
+            spill1 = leer_spill()
+            spill = None if spill0 is None or spill1 is None else spill1 > spill0
+            n_oom = metrics.oom_kills(nombre) - oom0
         else:
-            thr, spill = None, None
+            thr, spill, n_oom = None, None, 1
     finally:
+        cerrar_spill()
         for c in clientes:
             try:
                 c.cerrar()
@@ -211,8 +245,11 @@ def ejecutar_corrida(perfil, motor, qid, concurrencia, rep, warmup, duracion, co
         notas.append("max_rss_mb desde memory.peak (Prometheus sin dato)")
 
     lat = [x[1] for x in m.muestras]
-    oom = estado["oom_killed"] or not estado["running"]
+    oom = n_oom > 0
+    if oom:
+        notas.append(f"oom_kill en el contenedor: {n_oom}" if estado["running"] else "el contenedor dejó de correr")
     errores = sum(v for k, v in m.fallos.items() if k != "corte")
+    falla_real = oom or errores > 0 or any(k != "corte" for k in fallos_warmup)
     if oom:
         status = "oom"
     elif not lat or errores:
@@ -255,4 +292,4 @@ def ejecutar_corrida(perfil, motor, qid, concurrencia, rep, warmup, duracion, co
 
     if cooldown > 0:
         time.sleep(cooldown)
-    return fila, notas
+    return fila, notas, falla_real

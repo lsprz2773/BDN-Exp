@@ -15,6 +15,8 @@ Uso (normalmente vía scripts/run_benchmarks.sh):
   run_matrix.py --profile A --only mongodb:Q1:1 --reps 1 --warmup 5 --duration 30 --cooldown 5 --test
 """
 import argparse
+import socket
+import subprocess
 import sys
 import time
 import traceback
@@ -40,10 +42,34 @@ def matriz(reps):
 
 
 def suite(perfil, accion, motor):
-    import subprocess
     nombre = "mongodb" if motor == "mongodb" else "postgres"
     subprocess.run([str(ROOT / "scripts" / "suite.sh"), perfil, accion, nombre],
                    check=True, capture_output=True)
+
+
+def puerto_abierto(puerto, segundos):
+    limite = time.time() + segundos
+    while time.time() < limite:
+        try:
+            socket.create_connection(("127.0.0.1", puerto), timeout=2).close()
+            return True
+        except OSError:
+            time.sleep(1)
+    return False
+
+
+def encender(perfil, motor):
+    """Enciende el motor y comprueba que su puerto responde desde el host. Docker Desktop
+    a veces no publica el puerto al arrancar dos suites a la vez (E-006): se reintenta."""
+    env = br.perfil_env(perfil)
+    puerto = int(env["MONGO_PORT"] if motor == "mongodb" else env["PG_PORT"])
+    for intento in range(1, 4):
+        suite(perfil, "up", motor)
+        if puerto_abierto(puerto, 20):
+            return
+        print(f"  ! puerto {puerto} sin respuesta (intento {intento}); se reinicia el contenedor", flush=True)
+        suite(perfil, "stop", motor)
+    raise RuntimeError(f"el puerto {puerto} de {motor} no responde tras 3 intentos")
 
 
 def barrera(tag, paso, perfil, partes):
@@ -117,27 +143,28 @@ def main():
         if hecha:
             print(f"[{paso}/{len(corridas)}] {rid} ya hecha, se omite", flush=True)
             continue
-        if motor != motor_actual:
-            otro = "postgresql" if motor == "mongodb" else "mongodb"
-            suite(a.profile, "stop", otro)
-            suite(a.profile, "up", motor)
-            motor_actual = motor
-
         print(f"[{paso}/{len(corridas)}] {rid} ...", end=" ", flush=True)
         inicio = time.time()
         raw = raw_dir / f"{rid.replace(':', '_')}.csv.gz"
         try:
-            fila, notas = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
-                                              warmup, duracion, cooldown, raw)
+            if motor != motor_actual:
+                otro = "postgresql" if motor == "mongodb" else "mongodb"
+                suite(a.profile, "stop", otro)
+                encender(a.profile, motor)
+                motor_actual = motor
+            fila, notas, falla_real = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
+                                                          warmup, duracion, cooldown, raw)
         except Exception as exc:   # la corrida no pudo ni medirse: se registra como error
             traceback.print_exc()
             fila = {c: "" for c in csv_writer.COLUMNAS}
             fila.update(timestamp_epoch=int(inicio), engine=motor, profile=br.PERFILES[a.profile],
                         query_id=qid, concurrency=conc, run_number=rep, status="error")
-            notas = [f"{type(exc).__name__}: {str(exc)[:200]}"]
+            notas, falla_real = [f"{type(exc).__name__}: {str(exc)[:200]}"], True
             motor_actual = None   # fuerza a reiniciar el motor en la siguiente
+        if motor_actual and not metrics.estado_contenedor(br.contenedor(a.profile, motor))["running"]:
+            motor_actual = None   # el motor cayó (OOM): se vuelve a levantar en la siguiente
         csv_writer.agregar_fila(csv_path, fila)
-        tracking.registrar(fila, notas, a.round, a.profile, inicio, time.time(), a.test)
+        tracking.registrar(fila, notas, a.round, a.profile, inicio, time.time(), a.test, falla_real)
         print(f"{fila['status']} | qps={fila['throughput_qps']} p99={fila['latency_p99_ms']} "
               f"thr={fila['cpu_throttled_seconds']} rss={fila['max_rss_mb']}", flush=True)
 

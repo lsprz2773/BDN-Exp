@@ -82,7 +82,9 @@ def _archivos(prueba):
     return bit, err
 
 
-def registrar(fila, notas, ronda, perfil, inicio, fin, prueba):
+def registrar(fila, notas, ronda, perfil, inicio, fin, prueba, falla_real=True):
+    """falla_real=False: el `error` solo se debe a que ninguna consulta cupo en la ventana
+    (resultado esperado en perfiles severos, D-26); va a la bitácora pero no a errores."""
     bitacora, errores = _archivos(prueba)
     rid = id_corrida(perfil, fila["engine"], fila["query_id"], fila["concurrency"], fila["run_number"])
     fmt = lambda t: datetime.fromtimestamp(t).strftime("%Y-%m-%d %H:%M:%S")
@@ -94,7 +96,7 @@ def registrar(fila, notas, ronda, perfil, inicio, fin, prueba):
             fila["cpu_throttled_seconds"], fila["max_rss_mb"], "; ".join(notas) or "-",
         ]) + " |")
 
-        if fila["status"] in ("error", "oom"):
+        if fila["status"] in ("error", "oom") and falla_real:
             texto = errores.read_text(encoding="utf-8")
             n = max([int(x) for x in re.findall(r"\| E-(\d+) \|", texto)] or [0]) + 1
             _insertar_en_tabla(errores, "## Errores abiertos o en corrección", "| " + " | ".join(_celda(x) for x in [

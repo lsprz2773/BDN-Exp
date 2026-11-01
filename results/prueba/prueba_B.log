@@ -1,0 +1,20 @@
+Suite B | PRUEBA | partes ['B', 'C'] | 18 corridas | ventanas 5/20/5 s
+[1/18] B:MONGO:Q1:c1:r1 ... ok | qps=0.6 p99=1728.34 thr=0.444 rss=721.3
+[2/18] B:MONGO:Q1:c10:r1 ... error | qps=0.0 p99= thr=193.301 rss=739.9
+[3/18] B:MONGO:Q1:c50:r1 ... error | qps=0.0 p99= thr=189.747 rss=806.8
+[4/18] B:MONGO:Q2_DISK0:c1:r1 ... ok | qps=0.75 p99=1652.31 thr=0.505 rss=697.9
+[5/18] B:MONGO:Q2_DISK0:c10:r1 ... ok | qps=0.5 p99=16897.09 thr=148.63 rss=856.2
+[6/18] B:MONGO:Q2_DISK0:c50:r1 ... error | qps=0.0 p99= thr=174.953 rss=865.3
+[7/18] B:MONGO:Q2_DISK1:c1:r1 ... ok | qps=0.6 p99=3939.78 thr=0.347 rss=733.6
+[8/18] B:MONGO:Q2_DISK1:c10:r1 ... ok | qps=0.5 p99=18873.04 thr=148.027 rss=873.7
+[9/18] B:MONGO:Q2_DISK1:c50:r1 ... error | qps=0.0 p99= thr=190.383 rss=870.0
+[10/18] B:PG:Q1:c1:r1 ... spill | qps=0.05 p99=14366.22 thr=1.819 rss=99.2
+[11/18] B:PG:Q1:c10:r1 ... error | qps=0.0 p99= thr=25.426 rss=519.7
+[12/18] B:PG:Q1:c50:r1 ... error | qps=0.0 p99= thr=158.054 rss=1757.3
+[13/18] B:PG:Q2_WM4:c1:r1 ... ok | qps=1.35 p99=2775.78 thr=44.938 rss=12.1
+[14/18] B:PG:Q2_WM4:c10:r1 ... ok | qps=0.2 p99=15990.37 thr=179.664 rss=41.6
+[15/18] B:PG:Q2_WM4:c50:r1 ... ok | qps=0.2 p99=18454.54 thr=186.106 rss=121.2
+[16/18] B:PG:Q2_WM64:c1:r1 ... ok | qps=1.9 p99=2351.37 thr=45.425 rss=12.4
+[17/18] B:PG:Q2_WM64:c10:r1 ... ok | qps=0.35 p99=11406.23 thr=159.526 rss=40.7
+[18/18] B:PG:Q2_WM64:c50:r1 ... ok | qps=0.2 p99=13618.4 thr=173.29 rss=121.6
+Fin de la suite

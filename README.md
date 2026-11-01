@@ -74,6 +74,14 @@ Todo se ejecuta **dentro de WSL/Linux**, desde la raíz del repositorio.
 
 ### Al terminar: sincronizar los resultados
 
+Primero, **en la misma PC y con el monitoreo todavía arriba**, exportar de Prometheus las series
+por corrida (RSS y CPU usada cada 1 s, y los CPU-s de cada ventana para M3):
+```bash
+~/.venvs/bdn/bin/python -I scripts/export_series.py 2
+```
+Escribe en `results/series/ronda2/`. Las corridas sin serie en Prometheus quedan en
+`resumen.csv` con las columnas vacías.
+
 Cada ronda escribe en rutas propias (`*ronda2*`), así que los resultados de las dos PCs se juntan
 **con git y sin conflictos**:
 
@@ -94,6 +102,7 @@ Contiene la bitácora con el detalle de cada corrida, los errores y el control d
 | Host, límites reales y versión del motor | `results/entorno/ronda2/` | git |
 | Evidencia de spill/OOM | `results/evidencia_spill_oom/ronda2/` | git |
 | Log de consola de la ronda | `results/logs/ronda2_B.log` | git |
+| Series de RSS y CPU por corrida | `results/series/ronda2/` | git |
 | Bitácora, errores y control de la matriz | `seguimiento/BITACORA_EJECUCION.md`, `seguimiento/ESTATUS_ERRORES.md`, `seguimiento/CONTROL_MATRIZ.md` | **enviar aparte** (zip) |
 
 Si en esa PC no hay acceso para hacer `git push`, se envían en un zip la carpeta `results/` completa
@@ -120,6 +129,7 @@ scripts/run_benchmarks.sh --profile A --round 1 --parties A,C --session r1 2>&1 
 scripts/run_benchmarks.sh --profile C --round 1 --parties A,C --session r1 2>&1 | tee results/logs/ronda1_C.log
 ```
 Para reanudar una ronda interrumpida se usa una sesión nueva (por ejemplo `r1b`).
+Al terminar, exportar las series con `~/.venvs/bdn/bin/python -I scripts/export_series.py 1`.
 
 ## Otras herramientas
 - `scripts/suite.sh <A|B|C> <up|stop|down|ps|logs> [mongodb|postgres]`: control manual de una suite

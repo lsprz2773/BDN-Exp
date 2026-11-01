@@ -14,6 +14,9 @@ services:
       - --docker=unix:///nonexistent.sock
       - --docker_only=false
       - --raw_cgroup_prefix_whitelist=/docker/
+    # Con el cgroup namespace privado (por defecto en algunas versiones de Docker Desktop)
+    # cAdvisor solo ve su propia cgroup y publica id="/" (E-010). Con el del host ve /docker/<id>.
+    cgroup: host
     privileged: true
     devices:
       - /dev/kmsg

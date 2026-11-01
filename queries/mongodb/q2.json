@@ -1,0 +1,11 @@
+[
+  { "$match": {
+      "unidad.estado": "cerrada",
+      "cerrado_en": { "$gte": "2026-01-01T00:00:00Z" }
+  } },
+  { "$sort": { "calificacion.final": -1 } },
+  { "$limit": 1000 },
+  { "$project": {
+      "resultado_id": 1, "alumno.id": 1, "calificacion.final": 1
+  } }
+]

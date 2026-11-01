@@ -30,7 +30,8 @@ services:
       - --path.rootfs=/host
     pid: host
     volumes:
-      - /:/host:ro,rslave
+      # Sin rslave: Docker Desktop no monta / como shared
+      - /:/host:ro
     ports:
       - "127.0.0.1:9100:9100"
     cpus: "0.25"

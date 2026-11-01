@@ -54,6 +54,24 @@ def guardar_entorno(carpeta, perfil, motor):
                 f"  {inspect}\n  {cgroup}\n  version={version}\n")
 
 
+def guardar_host(carpeta):
+    """Especificaciones del host donde corre la ronda (sección 1 del reporte). Importa si
+    las rondas se ejecutan en equipos distintos."""
+    def salida(*cmd):
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        return (r.stdout or r.stderr).strip()
+    cpu = next((l.split(":", 1)[1].strip() for l in salida("lscpu").splitlines()
+                if l.startswith("Model name")), "?")
+    carpeta.mkdir(parents=True, exist_ok=True)
+    with open(carpeta / "host.txt", "a", encoding="utf-8") as f:
+        f.write(f"== {time.strftime('%Y-%m-%d %H:%M:%S')}\n"
+                f"cpu: {cpu} | nproc: {salida('nproc')} | kernel: {salida('uname', '-r')}\n"
+                f"memoria:\n{salida('free', '-m')}\n"
+                f"docker: {salida('docker', 'version', '--format', '{{.Server.Version}}')} | "
+                f"cgroup: {salida('docker', 'info', '--format', '{{.CgroupVersion}}')} | "
+                f"NCPU/Mem docker: {salida('docker', 'info', '--format', '{{.NCPU}} / {{.MemTotal}}')}\n\n")
+
+
 def guardar_evidencia(carpeta, rid, perfil, motor, inicio, fila, notas):
     """Logs del motor y eventos de memoria de una corrida con spill, OOM o error (diapositiva 10)."""
     nombre = br.contenedor(perfil, motor)
@@ -157,7 +175,9 @@ def main():
         if not a.round:
             sys.exit("--round es obligatorio fuera de --test")
         reps, warmup, duracion, cooldown = 3, 60, 300, 60
-        csv_path = ROOT / "results" / "csv" / "mediciones.csv"
+        # Un CSV por ronda: las rondas pueden correr en PCs distintas y así no hay conflictos
+        # al juntar los resultados en git. El estudio concatena los CSV (mismo esquema).
+        csv_path = ROOT / "results" / "csv" / f"mediciones_ronda{a.round}.csv"
         raw_dir = ROOT / "results" / "raw" / f"ronda{a.round}"
         evid_dir = ROOT / "results" / "evidencia_spill_oom" / f"ronda{a.round}"
         entorno_dir = ROOT / "results" / "entorno" / f"ronda{a.round}"
@@ -175,6 +195,9 @@ def main():
     if a.only:
         filtro = a.only.split(":")
         corridas = [c for c in corridas if all(str(x) == f for x, f in zip(c, filtro))]
+    if not a.test:
+        tracking.asegurar_control(list(matriz(3)))
+    guardar_host(entorno_dir)
     print(f"Suite {a.profile} | {'PRUEBA' if a.test else f'ronda {a.round}'} | partes {partes} | "
           f"{len(corridas)} corridas | ventanas {warmup}/{duracion}/{cooldown} s", flush=True)
 

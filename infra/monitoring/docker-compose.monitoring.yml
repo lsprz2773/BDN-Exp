@@ -4,12 +4,16 @@
 
 services:
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.52.1
+    image: ghcr.io/google/cadvisor:v0.53.0
+    # Docker 29 usa el image store de containerd y la fábrica "docker" de cAdvisor falla
+    # ("failed to identify the read-write layer ID", E-004). Se desactiva apuntándola a un
+    # socket inexistente, y los contenedores se leen como cgroups crudos /docker/<id>.
+    # El runner traduce el id al perfil y al motor con docker inspect.
     command:
       - --housekeeping_interval=1s
-      - --docker_only=true
-      - --store_container_labels=false
-      - --whitelisted_container_labels=bench.profile,bench.engine
+      - --docker=unix:///nonexistent.sock
+      - --docker_only=false
+      - --raw_cgroup_prefix_whitelist=/docker/
     privileged: true
     devices:
       - /dev/kmsg
@@ -30,7 +34,7 @@ services:
       - --path.rootfs=/host
     pid: host
     volumes:
-      # Sin rslave: Docker Desktop no monta / como shared
+      # Sin rslave: Docker Desktop no monta / como shared (E-003)
       - /:/host:ro
     ports:
       - "127.0.0.1:9100:9100"

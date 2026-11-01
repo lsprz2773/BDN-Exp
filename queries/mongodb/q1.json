@@ -1,0 +1,15 @@
+[
+  { "$unwind": "$calificacion.desglose" },
+  { "$match": { "calificacion.desglose.promedio": { "$gt": 6 } } },
+  {
+    "$group": {
+      "_id": {
+        "materia": "$contexto.materia.nombre",
+        "criterio": "$calificacion.desglose.criterio"
+      },
+      "total_aporte": { "$sum": { "$multiply": ["$calificacion.desglose.porcentaje", "$calificacion.desglose.promedio"] } },
+      "avg_aporte": { "$avg": { "$multiply": ["$calificacion.desglose.porcentaje", "$calificacion.desglose.promedio"] } },
+      "count": { "$sum": 1 }
+    }
+  }
+]

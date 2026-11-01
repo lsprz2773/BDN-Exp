@@ -11,6 +11,7 @@
 import json
 import subprocess
 import threading
+import time
 import urllib.parse
 import urllib.request
 
@@ -36,12 +37,20 @@ def cgroup_file(nombre, archivo):
     return _run("docker", "exec", nombre, "cat", f"/sys/fs/cgroup/{archivo}")
 
 
+def _claves(texto):
+    return {c: int(v) for c, v in (linea.split() for linea in texto.splitlines()) if v.isdigit()}
+
+
 def throttled_seconds(nombre):
-    for linea in cgroup_file(nombre, "cpu.stat").splitlines():
-        clave, valor = linea.split()
-        if clave == "throttled_usec":
-            return int(valor) / 1e6
-    return 0.0
+    return _claves(cgroup_file(nombre, "cpu.stat")).get("throttled_usec", 0) / 1e6
+
+
+def cpu_usage_seconds(nombre):
+    """CPU usada por el contenedor (usage_usec de cpu.stat); base de M3."""
+    try:
+        return _claves(cgroup_file(nombre, "cpu.stat")).get("usage_usec", 0) / 1e6
+    except subprocess.CalledProcessError:
+        return None
 
 
 def oom_kills(nombre):
@@ -75,20 +84,31 @@ def rss_mb(nombre):
 
 
 class MuestreoRSS:
-    """Muestrea rss_mb cada segundo en un hilo. Respaldo para cuando cAdvisor no ve la cgroup
-    del contenedor (Docker Desktop 29.9 la anida fuera de /docker/, E-010)."""
+    """Muestrea cada segundo, en un hilo, el RSS (`anon` de memory.stat) y la CPU usada
+    (`usage_usec` de cpu.stat) con un solo docker exec. Respaldo para cuando cAdvisor no ve
+    la cgroup del contenedor (Docker Desktop 29.9 la anida fuera de /docker/, E-010).
+    `muestras` = [(t_epoch, rss_mb, cpu_s)] alimenta la curva RSS de la corrida."""
 
     def __init__(self, nombre, intervalo=1.0):
         self.nombre, self.intervalo, self.maximo = nombre, intervalo, None
+        self.muestras = []
         self._parar = threading.Event()
         self._hilo = threading.Thread(target=self._bucle, daemon=True)
 
     def _bucle(self):
         while not self._parar.is_set():
-            v = rss_mb(self.nombre)
-            if v is not None and (self.maximo is None or v > self.maximo):
-                self.maximo = v
-            self._parar.wait(self.intervalo)
+            t = time.time()
+            try:
+                c = _claves(_run("docker", "exec", self.nombre, "cat",
+                                 "/sys/fs/cgroup/memory.stat", "/sys/fs/cgroup/cpu.stat"))
+                v = c["anon"] / 2**20
+                self.muestras.append((t, v, c["usage_usec"] / 1e6))
+                if self.maximo is None or v > self.maximo:
+                    self.maximo = v
+            except (subprocess.CalledProcessError, KeyError):
+                pass
+            # docker exec tarda ~0,5-1 s con el host cargado: se descuenta para no espaciar más.
+            self._parar.wait(max(0.0, self.intervalo - (time.time() - t)))
 
     def iniciar(self):
         self._hilo.start()

@@ -170,6 +170,7 @@ def main():
         raw_dir = ROOT / "results" / "prueba" / "raw"
         evid_dir = ROOT / "results" / "prueba" / "evidencia_spill_oom"
         entorno_dir = ROOT / "results" / "prueba" / "entorno"
+        serie_dir = ROOT / "results" / "prueba" / "series"
         tag = "prueba"
     else:
         if not a.round:
@@ -181,6 +182,7 @@ def main():
         raw_dir = ROOT / "results" / "raw" / f"ronda{a.round}"
         evid_dir = ROOT / "results" / "evidencia_spill_oom" / f"ronda{a.round}"
         entorno_dir = ROOT / "results" / "entorno" / f"ronda{a.round}"
+        serie_dir = ROOT / "results" / "series" / f"ronda{a.round}"
         tag = f"ronda{a.round}"
     reps = a.reps or reps
     warmup = warmup if a.warmup is None else a.warmup
@@ -219,8 +221,9 @@ def main():
                 encender(a.profile, motor)
                 motor_actual = motor
                 guardar_entorno(entorno_dir, a.profile, motor)
-            fila, notas, falla_real = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
-                                                          warmup, duracion, cooldown, raw)
+            fila, notas, falla_real = br.ejecutar_corrida(
+                a.profile, motor, qid, conc, rep, warmup, duracion, cooldown, raw,
+                serie_dir / f"{rid.replace(':', '_')}.csv.gz")
         except Exception as exc:   # la corrida no pudo ni medirse: se registra como error
             traceback.print_exc()
             fila = {c: "" for c in csv_writer.COLUMNAS}

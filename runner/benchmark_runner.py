@@ -201,9 +201,39 @@ def _lector_spill(motor, env):
     return leer, cerrar
 
 
-def ejecutar_corrida(perfil, motor, qid, concurrencia, rep, warmup, duracion, cooldown, ruta_raw):
+def _guardar_cpu(ruta, fila, cpu_s):
+    """CPU-s de la ventana leídos de la cgroup; scripts/export_series.py los usa cuando
+    Prometheus no tiene la serie del contenedor (E-010). Varias suites escriben a la vez."""
+    import fcntl
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    claves = ("timestamp_epoch", "engine", "profile", "query_id", "concurrency", "run_number")
+    with open(ruta, "a", encoding="utf-8") as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        f.seek(0, 2)
+        if f.tell() == 0:
+            f.write(",".join(claves) + ",cpu_seconds_medicion\n")
+        f.write(",".join(str(fila[k]) for k in claves) + f",{'' if cpu_s is None else round(cpu_s, 3)}\n")
+        f.flush()
+        fcntl.flock(f, fcntl.LOCK_UN)
+
+
+def _guardar_serie(ruta, muestras):
+    """Serie del muestreo propio, mismo formato que scripts/export_series.py."""
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(ruta, "wt", encoding="utf-8") as f:
+        f.write("t_epoch,fase,rss_mb,cpu_nucleos\n")
+        previo = None
+        for t, rss, cpu in muestras:
+            nucleos = "" if previo is None else round((cpu - previo[1]) / (t - previo[0]), 4)
+            f.write(f"{int(t)},medicion,{round(rss, 1)},{nucleos}\n")
+            previo = (t, cpu)
+
+
+def ejecutar_corrida(perfil, motor, qid, concurrencia, rep, warmup, duracion, cooldown, ruta_raw,
+                     ruta_serie=None):
     """Devuelve (fila_csv, notas, falla_real). falla_real = hubo algo que corregir o analizar
-    (OOM o fallos distintos de cortes por fin de ventana)."""
+    (OOM o fallos distintos de cortes por fin de ventana). Con ruta_serie, guarda también los
+    CPU-s de la ventana y, si hubo muestreo propio, la serie de RSS y CPU."""
     env = perfil_env(perfil)
     nombre = contenedor(perfil, motor)
     cid = metrics.container_id(nombre)
@@ -224,10 +254,14 @@ def ejecutar_corrida(perfil, motor, qid, concurrencia, rep, warmup, duracion, co
         if metrics.max_rss_mb_prometheus(cid, max(warmup, 10), time.time()) is None:
             muestreo = metrics.MuestreoRSS(nombre).iniciar()
         thr0, spill0 = metrics.throttled_seconds(nombre), leer_spill()
+        cpu0 = metrics.cpu_usage_seconds(nombre)
         m = correr_fase(clientes, duracion)
         rss_muestreo = muestreo.detener() if muestreo else None
         estado = metrics.estado_contenedor(nombre)
+        cpu_s = None
         if estado["running"]:
+            cpu1 = metrics.cpu_usage_seconds(nombre)
+            cpu_s = None if cpu0 is None or cpu1 is None or cpu1 < cpu0 else cpu1 - cpu0
             thr = metrics.throttled_seconds(nombre) - thr0
             spill1 = leer_spill()
             spill = None if spill0 is None or spill1 is None else spill1 > spill0
@@ -299,6 +333,11 @@ def ejecutar_corrida(perfil, motor, qid, concurrencia, rep, warmup, duracion, co
         "disk_spill": "" if spill is None else str(bool(spill)).lower(),
         "status": status,
     }
+
+    if ruta_serie:
+        _guardar_cpu(ruta_serie.parent / "cpu_cgroup.csv", fila, cpu_s)
+        if muestreo and muestreo.muestras:
+            _guardar_serie(ruta_serie, muestreo.muestras)
 
     if cooldown > 0:
         time.sleep(cooldown)

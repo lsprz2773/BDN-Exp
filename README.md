@@ -37,6 +37,19 @@ cada una con warmup de 60 s, medición de 300 s y cooldown de 60 s (~6,5 h por p
 
 Todo se ejecuta **dentro de WSL/Linux**, desde la raíz del repositorio.
 
+0. **Solo en equipos con 8 GB de RAM** (por ejemplo, la Dell Vostro 3400): WSL2 recibe por defecto la
+   mitad de la RAM (~3,8 GB), que es menos que los 4 GB del perfil A. Antes de empezar, en Windows crear
+   `%USERPROFILE%\.wslconfig` con:
+   ```ini
+   [wsl2]
+   memory=6GB
+   processors=8
+   swap=2GB
+   ```
+   Después, en PowerShell ejecutar `wsl --shutdown`, reabrir Docker Desktop y comprobar dentro de WSL con
+   `free -h` que aparecen ~5,8 GB. Durante la ronda, Windows queda con ~2 GB: **cerrar el navegador y
+   las demás aplicaciones**.
+
 1. Clonar:
    ```bash
    git clone https://github.com/lsprz2773/BDN-Exp.git
@@ -56,16 +69,41 @@ Todo se ejecuta **dentro de WSL/Linux**, desde la raíz del repositorio.
    scripts/run_benchmarks.sh --profile A --round 2 2>&1 | tee results/logs/ronda2_A.log
    ```
    Si se interrumpe, se vuelve a lanzar el mismo comando y continúa donde se quedó.
-5. Subir los resultados:
-   ```bash
-   git add results/
-   git commit -m "data(results): ronda 2, perfil A"
-   git push
-   ```
+5. Al terminar, entregar los resultados (ver la sección siguiente).
 
-Salidas de la ronda: `results/csv/mediciones_ronda2.csv`, `results/raw/ronda2/`,
-`results/entorno/ronda2/` (host, límites reales y versión del motor) y `results/evidencia_spill_oom/ronda2/`.
-El seguimiento local (bitácora, errores y control de la matriz) se genera en `seguimiento/`, que no se versiona.
+### Al terminar: sincronizar los resultados
+
+Cada ronda escribe en rutas propias (`*ronda2*`), así que los resultados de las dos PCs se juntan
+**con git y sin conflictos**:
+
+```bash
+git add results/
+git commit -m "data(results): ronda 2, perfil A"
+git pull --rebase
+git push
+```
+
+Además hay que **enviar aparte** la carpeta `seguimiento/`, que no se versiona: comprimirla y mandarla.
+Contiene la bitácora con el detalle de cada corrida, los errores y el control de la matriz.
+
+| Qué | Ruta | Cómo llega |
+|---|---|---|
+| Mediciones (54 filas) | `results/csv/mediciones_ronda2.csv` | git |
+| Latencias crudas (54 archivos) | `results/raw/ronda2/` | git |
+| Host, límites reales y versión del motor | `results/entorno/ronda2/` | git |
+| Evidencia de spill/OOM | `results/evidencia_spill_oom/ronda2/` | git |
+| Log de consola de la ronda | `results/logs/ronda2_A.log` | git |
+| Bitácora, errores y control de la matriz | `seguimiento/BITACORA_EJECUCION.md`, `seguimiento/ESTATUS_ERRORES.md`, `seguimiento/CONTROL_MATRIZ.md` | **enviar aparte** (zip) |
+
+Si en esa PC no hay acceso para hacer `git push`, se envían en un zip la carpeta `results/` completa
+y la carpeta `seguimiento/`.
+
+Para comprobar que la ronda terminó completa antes de entregar:
+```bash
+echo "filas: $(($(wc -l < results/csv/mediciones_ronda2.csv) - 1)) de 54"
+grep -E "^\| A \|" seguimiento/CONTROL_MATRIZ.md
+```
+La fila del perfil A del control debe quedar sin corridas pendientes (☐ = 0).
 
 > **Comparabilidad:** si la ronda 2 corre en un equipo distinto al de la ronda 1, el baseline (A) y los
 > perfiles B/C se miden en hardware diferente. `results/entorno/ronda*/host.txt` registra la CPU, la RAM

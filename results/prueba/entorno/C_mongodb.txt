@@ -1,0 +1,4 @@
+2026-11-01 11:37:34 perfil=PROFILE_C_SEVERE motor=mongodb
+  imagen=mongo:9.0.4 digest=sha256:452bdaf2127b8ff851e31410a267809b9829eded219979f2210e7c7efb85a058 NanoCpus=1000000000 Memory=1073741824 MemorySwap=1073741824
+  cpu.max=100000 100000 memory.max=1073741824 memory.swap.max=0
+  version=9.0.4

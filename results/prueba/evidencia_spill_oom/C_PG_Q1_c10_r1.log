@@ -1,0 +1,313 @@
+corrida: C:PG:Q1:c10:r1
+status: error  disk_spill: true
+notas: warmup: {'corte': 10}; spill: +766189568 (temp_bytes); fallos en medición: {'corte': 10}; ninguna consulta terminó dentro de la ventana
+
+== memory.events
+low 0
+high 0
+max 44936
+oom 0
+oom_kill 0
+oom_group_kill 0
+
+== docker logs suite_c-postgres-1 desde 2026-11-01T17:43:20Z (últimas 300 líneas de 354)
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.057 UTC [1] LOG:  background worker "parallel worker" (PID 173) exited with exit code 1
+2026-11-01 17:43:31.058 UTC [1] LOG:  background worker "parallel worker" (PID 174) exited with exit code 1
+2026-11-01 17:43:31.154 UTC [161] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:31.154 UTC [161] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.157 UTC [172] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:31.157 UTC [172] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.258 UTC [1] LOG:  background worker "parallel worker" (PID 172) exited with exit code 1
+2026-11-01 17:43:31.369 UTC [165] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:31.369 UTC [165] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.464 UTC [162] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:31.464 UTC [162] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.465 UTC [171] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:31.465 UTC [171] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.465 UTC [170] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:31.465 UTC [170] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.553 UTC [1] LOG:  background worker "parallel worker" (PID 170) exited with exit code 1
+2026-11-01 17:43:31.558 UTC [1] LOG:  background worker "parallel worker" (PID 171) exited with exit code 1
+2026-11-01 17:43:31.565 UTC [160] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:31.565 UTC [160] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.570 UTC [164] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:31.570 UTC [164] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.570 UTC [168] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:31.570 UTC [168] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.653 UTC [177] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:31.653 UTC [177] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.653 UTC [175] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:31.653 UTC [175] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:31.660 UTC [1] LOG:  background worker "parallel worker" (PID 175) exited with exit code 1
+2026-11-01 17:43:31.678 UTC [1] LOG:  background worker "parallel worker" (PID 177) exited with exit code 1
+2026-11-01 17:43:51.881 UTC [166] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:51.881 UTC [166] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.944 UTC [167] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:51.944 UTC [167] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.944 UTC [165] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:51.944 UTC [165] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.944 UTC [161] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:51.944 UTC [161] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.944 UTC [162] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:51.944 UTC [162] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.944 UTC [164] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:51.944 UTC [164] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.944 UTC [160] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:51.944 UTC [160] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.945 UTC [168] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:51.945 UTC [168] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.945 UTC [169] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:51.945 UTC [169] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.945 UTC [194] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:51.945 UTC [194] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.945 UTC [196] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:51.945 UTC [196] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.945 UTC [195] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:51.945 UTC [195] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.945 UTC [191] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:51.945 UTC [191] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.945 UTC [192] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:51.945 UTC [192] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.947 UTC [193] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:51.947 UTC [193] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.948 UTC [197] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-01 17:43:51.948 UTC [197] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:51.944 UTC [163] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:43:51.944 UTC [163] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:43:52.045 UTC [1] LOG:  background worker "parallel worker" (PID 196) exited with exit code 1
+2026-11-01 17:43:52.046 UTC [1] LOG:  background worker "parallel worker" (PID 194) exited with exit code 1
+2026-11-01 17:43:52.047 UTC [1] LOG:  background worker "parallel worker" (PID 192) exited with exit code 1
+2026-11-01 17:43:52.047 UTC [1] LOG:  background worker "parallel worker" (PID 193) exited with exit code 1
+2026-11-01 17:43:52.047 UTC [1] LOG:  background worker "parallel worker" (PID 197) exited with exit code 1
+2026-11-01 17:43:52.049 UTC [1] LOG:  background worker "parallel worker" (PID 191) exited with exit code 1
+2026-11-01 17:43:52.049 UTC [1] LOG:  background worker "parallel worker" (PID 195) exited with exit code 1

@@ -1,0 +1,313 @@
+corrida: A:PG:Q1:c50:r1
+status: error  disk_spill: true
+notas: warmup: {'corte': 50}; spill: +9235939328 (temp_bytes); fallos en medición: {'corte': 50}; ninguna consulta terminó dentro de la ventana
+
+== memory.events
+low 0
+high 0
+max 100328
+oom 0
+oom_kill 0
+oom_group_kill 0
+
+== docker logs suite_a-postgres-1 desde 2026-11-01T17:43:55Z (últimas 300 líneas de 1154)
+2026-11-01 17:44:27.976 UTC [297] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.976 UTC [324] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.976 UTC [324] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.982 UTC [315] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.982 UTC [315] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.985 UTC [312] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.985 UTC [312] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.988 UTC [291] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.988 UTC [291] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.989 UTC [309] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.989 UTC [309] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.989 UTC [292] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.989 UTC [292] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.992 UTC [294] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.992 UTC [294] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.992 UTC [287] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.992 UTC [287] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.993 UTC [322] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.993 UTC [322] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.994 UTC [295] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.994 UTC [295] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.994 UTC [298] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.994 UTC [298] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.994 UTC [323] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.994 UTC [323] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.996 UTC [314] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.996 UTC [314] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.997 UTC [284] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.997 UTC [284] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:27.997 UTC [289] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:27.997 UTC [289] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.000 UTC [311] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.000 UTC [311] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.007 UTC [302] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.007 UTC [302] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.008 UTC [310] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.008 UTC [310] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.009 UTC [299] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.009 UTC [299] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.026 UTC [301] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.026 UTC [301] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.029 UTC [293] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.029 UTC [293] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.037 UTC [305] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.037 UTC [305] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.046 UTC [280] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.046 UTC [280] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.072 UTC [285] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.072 UTC [285] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.082 UTC [317] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.082 UTC [317] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.090 UTC [283] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.090 UTC [283] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.093 UTC [300] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.093 UTC [300] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.095 UTC [321] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.095 UTC [321] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:28.110 UTC [313] ERROR:  canceling statement due to statement timeout
+2026-11-01 17:44:28.110 UTC [313] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-01 17:44:30.068 UTC [1] LOG:  background worker "parallel worker" (PID 349) exited with exit code 1

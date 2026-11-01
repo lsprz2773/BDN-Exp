@@ -1,0 +1,24 @@
+Levantando el stack de monitoreo...
+ Container monitor-node-exporter-1 Running 
+ Container monitor-prometheus-1 Running 
+ Container monitor-cadvisor-1 Running 
+Suite A | PRUEBA | partes ['A', 'C'] | 18 corridas | ventanas 5/20/5 s
+[1/18] A:MONGO:Q1:c1:r1 ... ok | qps=0.6 p99=1703.82 thr=0.0 rss=607.8
+[2/18] A:MONGO:Q1:c10:r1 ... ok | qps=0.5 p99=19901.22 thr=128.793 rss=818.8
+[3/18] A:MONGO:Q1:c50:r1 ... error | qps=0.0 p99= thr=158.284 rss=955.6
+[4/18] A:MONGO:Q2_DISK0:c1:r1 ... ok | qps=2.15 p99=524.96 thr=0.0 rss=985.3
+[5/18] A:MONGO:Q2_DISK0:c10:r1 ... ok | qps=4.15 p99=3420.93 thr=124.774 rss=969.6
+[6/18] A:MONGO:Q2_DISK0:c50:r1 ... ok | qps=0.3 p99=19488.54 thr=157.353 rss=977.3
+[7/18] A:MONGO:Q2_DISK1:c1:r1 ... ok | qps=2.3 p99=467.82 thr=0.0 rss=955.7
+[8/18] A:MONGO:Q2_DISK1:c10:r1 ... ok | qps=3.0 p99=4231.39 thr=127.475 rss=961.7
+[9/18] A:MONGO:Q2_DISK1:c50:r1 ... ok | qps=1.45 p99=19672.79 thr=157.459 rss=958.1
+[10/18] A:PG:Q1:c1:r1 ... spill | qps=0.35 p99=3227.36 thr=0.027 rss=100.3
+[11/18] A:PG:Q1:c10:r1 ... error | qps=0.0 p99= thr=32.498 rss=519.5
+[12/18] A:PG:Q1:c50:r1 ... error | qps=0.0 p99= thr=60.64 rss=1782.6
+[13/18] A:PG:Q2_WM4:c1:r1 ... ok | qps=7.5 p99=215.54 thr=9.422 rss=12.1
+[14/18] A:PG:Q2_WM4:c10:r1 ... ok | qps=1.7 p99=10042.24 thr=122.116 rss=40.4
+[15/18] A:PG:Q2_WM4:c50:r1 ... ok | qps=0.45 p99=18839.87 thr=135.311 rss=121.0
+[16/18] A:PG:Q2_WM64:c1:r1 ... ok | qps=7.4 p99=243.29 thr=10.85 rss=12.1
+[17/18] A:PG:Q2_WM64:c10:r1 ... ok | qps=1.7 p99=10258.01 thr=121.86 rss=41.0
+[18/18] A:PG:Q2_WM64:c50:r1 ... ok | qps=0.4 p99=19017.39 thr=131.481 rss=121.6
+Fin de la suite

@@ -97,7 +97,8 @@ def asegurar_control(corridas_por_perfil):
               "> Estado: ☐ Pendiente · ✔ ok · ⚠ spill · ✖ oom/error · ↻ Repetir", "",
               "## Resumen", "", "| Perfil | Ronda | Total | ✔ | ⚠ | ✖ | ↻ | ☐ |",
               "|---|---|---|---|---|---|---|---|"]
-    partes += [f"| {p} | {r} | {n} | 0 | 0 | 0 | 0 | {n} |" for p, r in (("A", "R2"), ("B", "R1"), ("C", "R1"))]
+    # Ronda 1: A + C en paralelo (PC principal); ronda 2: B (otra PC)
+    partes += [f"| {p} | {r} | {n} | 0 | 0 | 0 | 0 | {n} |" for p, r in (("A", "R1"), ("B", "R2"), ("C", "R1"))]
     partes.append(f"| **Total** | | **{3 * n}** | 0 | 0 | 0 | 0 | {3 * n} |")
     i = 0
     for p in "ABC":

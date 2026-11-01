@@ -28,8 +28,10 @@ command -v python3 >/dev/null || falla "falta python3"
 python3 -c 'import sys; assert sys.version_info >= (3, 10)' || falla "se requiere Python >= 3.10"
 mem_mb=$(( $(docker info --format '{{.MemTotal}}') / 1024 / 1024 ))
 echo "Docker $(docker version --format '{{.Server.Version}}'), cgroup v2, $(docker info --format '{{.NCPU}}') CPUs, ${mem_mb} MB"
-if [ "$PROFILE" = "A" ] && [ "$mem_mb" -lt 6000 ]; then
-  falla "el perfil A necesita ~6 GB para Docker (4 GB del motor + monitoreo); hay ${mem_mb} MB. En WSL sube 'memory=' en %USERPROFILE%\\.wslconfig"
+# Memoria mínima para Docker/WSL: límite del motor + monitoreo + runner + sistema
+case "$PROFILE" in A) min_mb=6000 ;; B) min_mb=4500 ;; *) min_mb=3500 ;; esac
+if [ "$mem_mb" -lt "$min_mb" ]; then
+  falla "el perfil $PROFILE necesita ~${min_mb} MB para Docker y hay ${mem_mb} MB. En WSL sube 'memory=' en %USERPROFILE%\\.wslconfig (ver README)"
 fi
 
 paso "2/5 Entorno virtual ($VENV)"

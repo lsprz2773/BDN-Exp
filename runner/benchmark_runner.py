@@ -227,6 +227,9 @@ def ejecutar_corrida(perfil, motor, qid, concurrencia, rep, warmup, duracion, co
             thr = metrics.throttled_seconds(nombre) - thr0
             spill1 = leer_spill()
             spill = None if spill0 is None or spill1 is None else spill1 > spill0
+            if spill:
+                unidad = "temp_bytes" if motor == "postgresql" else "contadores spill de serverStatus"
+                notas.append(f"spill: +{spill1 - spill0} ({unidad})")
             n_oom = metrics.oom_kills(nombre) - oom0
         else:
             thr, spill, n_oom = None, None, 1

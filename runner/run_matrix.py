@@ -33,6 +33,45 @@ HECHAS = {"✔", "⚠", "✖"}
 TIMEOUT_BARRERA = 30 * 60
 
 
+def guardar_entorno(carpeta, perfil, motor):
+    """Límites Docker reales, imagen y versión del motor de la suite (diapositiva 5)."""
+    nombre = br.contenedor(perfil, motor)
+    inspect = subprocess.run(
+        ["docker", "inspect", "--format",
+         "imagen={{.Config.Image}} digest={{.Image}} NanoCpus={{.HostConfig.NanoCpus}} "
+         "Memory={{.HostConfig.Memory}} MemorySwap={{.HostConfig.MemorySwap}}", nombre],
+        capture_output=True, text=True).stdout.strip()
+    cgroup = " ".join(f"{f}={metrics.cgroup_file(nombre, f)}" for f in ("cpu.max", "memory.max", "memory.swap.max"))
+    if motor == "mongodb":
+        version = subprocess.run(["docker", "exec", nombre, "mongosh", "--quiet", "--eval", "db.version()"],
+                                 capture_output=True, text=True).stdout.strip()
+    else:
+        version = subprocess.run(["docker", "exec", nombre, "psql", "-U", "bench", "-d", "control_academico",
+                                  "-tAc", "SELECT version()"], capture_output=True, text=True).stdout.strip()
+    carpeta.mkdir(parents=True, exist_ok=True)
+    with open(carpeta / f"{perfil}_{motor}.txt", "a", encoding="utf-8") as f:
+        f.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} perfil={br.PERFILES[perfil]} motor={motor}\n"
+                f"  {inspect}\n  {cgroup}\n  version={version}\n")
+
+
+def guardar_evidencia(carpeta, rid, perfil, motor, inicio, fila, notas):
+    """Logs del motor y eventos de memoria de una corrida con spill, OOM o error (diapositiva 10)."""
+    nombre = br.contenedor(perfil, motor)
+    desde = time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(inicio - 5)) + "Z"
+    logs = subprocess.run(["docker", "logs", "--since", desde, nombre], capture_output=True, text=True)
+    try:
+        eventos = metrics.cgroup_file(nombre, "memory.events")
+    except subprocess.CalledProcessError:
+        eventos = "(contenedor detenido)"
+    lineas = (logs.stdout + logs.stderr).splitlines()
+    carpeta.mkdir(parents=True, exist_ok=True)
+    (carpeta / f"{rid.replace(':', '_')}.log").write_text(
+        f"corrida: {rid}\nstatus: {fila['status']}  disk_spill: {fila['disk_spill']}\n"
+        f"notas: {'; '.join(notas) or '-'}\n\n== memory.events\n{eventos}\n\n"
+        f"== docker logs {nombre} desde {desde} (últimas 300 líneas de {len(lineas)})\n"
+        + "\n".join(lineas[-300:]) + "\n", encoding="utf-8")
+
+
 def matriz(reps):
     for motor in ("mongodb", "postgresql"):
         for qid in br.VARIANTES[motor]:
@@ -111,6 +150,8 @@ def main():
         reps, warmup, duracion, cooldown = 1, 5, 20, 5
         csv_path = ROOT / "results" / "prueba" / "mediciones_prueba.csv"
         raw_dir = ROOT / "results" / "prueba" / "raw"
+        evid_dir = ROOT / "results" / "prueba" / "evidencia_spill_oom"
+        entorno_dir = ROOT / "results" / "prueba" / "entorno"
         tag = "prueba"
     else:
         if not a.round:
@@ -118,6 +159,8 @@ def main():
         reps, warmup, duracion, cooldown = 3, 60, 300, 60
         csv_path = ROOT / "results" / "csv" / "mediciones.csv"
         raw_dir = ROOT / "results" / "raw" / f"ronda{a.round}"
+        evid_dir = ROOT / "results" / "evidencia_spill_oom" / f"ronda{a.round}"
+        entorno_dir = ROOT / "results" / "entorno" / f"ronda{a.round}"
         tag = f"ronda{a.round}"
     reps = a.reps or reps
     warmup = warmup if a.warmup is None else a.warmup
@@ -152,6 +195,7 @@ def main():
                 suite(a.profile, "stop", otro)
                 encender(a.profile, motor)
                 motor_actual = motor
+                guardar_entorno(entorno_dir, a.profile, motor)
             fila, notas, falla_real = br.ejecutar_corrida(a.profile, motor, qid, conc, rep,
                                                           warmup, duracion, cooldown, raw)
         except Exception as exc:   # la corrida no pudo ni medirse: se registra como error
@@ -161,6 +205,11 @@ def main():
                         query_id=qid, concurrency=conc, run_number=rep, status="error")
             notas, falla_real = [f"{type(exc).__name__}: {str(exc)[:200]}"], True
             motor_actual = None   # fuerza a reiniciar el motor en la siguiente
+        if fila["status"] in ("spill", "oom") or fila["disk_spill"] == "true" or falla_real:
+            try:
+                guardar_evidencia(evid_dir, rid, a.profile, motor, inicio, fila, notas)
+            except Exception as exc:
+                print(f"  ! no se pudo guardar la evidencia: {exc}", flush=True)
         if motor_actual and not metrics.estado_contenedor(br.contenedor(a.profile, motor))["running"]:
             motor_actual = None   # el motor cayó (OOM): se vuelve a levantar en la siguiente
         csv_writer.agregar_fila(csv_path, fila)

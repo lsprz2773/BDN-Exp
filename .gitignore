@@ -13,3 +13,7 @@ data/generated/*
 __pycache__/
 *.pyc
 .venv/
+
+# Estado de ejecución del runner
+results/logs/barrera/
+results/logs/.tracking.lock

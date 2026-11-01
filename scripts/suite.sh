@@ -26,8 +26,9 @@ compose() {
 
 case "$ACTION" in
   up)   compose up -d --wait $ENGINE ;;
-  stop) compose stop $ENGINE ;;
-  down) compose down ;;
+  # Timeout amplio: PostgreSQL puede tardar en su checkpoint final tras una carga grande
+  stop) compose stop -t 120 $ENGINE ;;
+  down) compose down -t 120 ;;
   ps)   compose ps ;;
   logs) compose logs --tail 50 $ENGINE ;;
   *) echo "Acción inválida: $ACTION" >&2; exit 1 ;;

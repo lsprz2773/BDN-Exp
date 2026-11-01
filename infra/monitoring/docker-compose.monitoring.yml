@@ -1,0 +1,57 @@
+# Stack de telemetría compartido por todas las suites (playbook §7).
+# Uso: docker compose -f infra/monitoring/docker-compose.monitoring.yml -p monitor up -d
+# Límites propios para que el monitoreo no compita con los motores por la RAM de WSL2 (D-12).
+
+services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.52.1
+    command:
+      - --housekeeping_interval=1s
+      - --docker_only=true
+      - --store_container_labels=false
+      - --whitelisted_container_labels=bench.profile,bench.engine
+    privileged: true
+    devices:
+      - /dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    ports:
+      - "127.0.0.1:8080:8080"
+    cpus: "0.5"
+    mem_limit: 256m
+
+  node-exporter:
+    image: prom/node-exporter:v1.9.1
+    command:
+      - --path.rootfs=/host
+    pid: host
+    volumes:
+      - /:/host:ro,rslave
+    ports:
+      - "127.0.0.1:9100:9100"
+    cpus: "0.25"
+    mem_limit: 128m
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=30d
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prom_data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+    cpus: "0.5"
+    mem_limit: 512m
+    depends_on:
+      - cadvisor
+      - node-exporter
+
+volumes:
+  prom_data:

@@ -20,7 +20,9 @@ def agregar_fila(ruta, fila):
     ruta.parent.mkdir(parents=True, exist_ok=True)
     with open(ruta, "a", newline="", encoding="utf-8") as f:
         fcntl.flock(f, fcntl.LOCK_EX)
+        f.seek(0, 2)   # la posición se fijó al abrir; otra suite pudo escribir antes del lock
         if f.tell() == 0:
             csv.writer(f).writerow(COLUMNAS)
         csv.DictWriter(f, fieldnames=COLUMNAS).writerow(fila)
+        f.flush()   # escribir antes de soltar el lock, no al cerrar
         fcntl.flock(f, fcntl.LOCK_UN)

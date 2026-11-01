@@ -2,11 +2,11 @@
 # Automatización de la matriz de mediciones (playbook §8.1).
 # Ejecuta todas las corridas de un perfil con runner/run_matrix.py.
 #
-#   Ronda 1 (dos terminales a la vez, misma --session):
-#     scripts/run_benchmarks.sh --profile B --round 1 --parties B,C --session r1
-#     scripts/run_benchmarks.sh --profile C --round 1 --parties B,C --session r1
-#   Ronda 2:
-#     scripts/run_benchmarks.sh --profile A --round 2
+#   Ronda 1, PC principal (dos terminales a la vez, misma --session):
+#     scripts/run_benchmarks.sh --profile A --round 1 --parties A,C --session r1
+#     scripts/run_benchmarks.sh --profile C --round 1 --parties A,C --session r1
+#   Ronda 2, segunda PC:
+#     scripts/run_benchmarks.sh --profile B --round 2
 #   Suite de prueba (F5.5): igual que la ronda 1 pero con --test en lugar de --round
 #   Al reanudar una ronda interrumpida, usar una --session nueva (p. ej. r1b).
 #

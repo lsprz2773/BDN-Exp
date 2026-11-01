@@ -16,39 +16,40 @@ al ejecutar agregaciones JSON anidadas con límites estrictos de CPU y memoria (
 
 ## Perfiles y rondas
 
-| Perfil | CPUs | Memoria | Ronda |
-|---|---|---|---|
-| A (baseline) | 4,0 | 4096 MB | 2 (sola) |
-| B (media) | 2,0 | 2048 MB | 1 (en paralelo con C) |
-| C (severa) | 1,0 | 1024 MB | 1 (en paralelo con B) |
+| Perfil | CPUs | Memoria | Ronda | Equipo |
+|---|---|---|---|---|
+| A (baseline) | 4,0 | 4096 MB | 1 (en paralelo con C) | PC principal |
+| B (media) | 2,0 | 2048 MB | 2 | Segunda PC |
+| C (severa) | 1,0 | 1024 MB | 1 (en paralelo con A) | PC principal |
 
-Cada perfil corre 54 corridas: 2 motores × (Q1 + 2 variantes de Q2) × concurrencias 1/10/50 × 3 repeticiones,
-cada una con warmup de 60 s, medición de 300 s y cooldown de 60 s (~6,5 h por perfil).
+Las dos rondas corren al mismo tiempo en equipos distintos. Cada perfil corre 54 corridas:
+2 motores × (Q1 + 2 variantes de Q2) × concurrencias 1/10/50 × 3 repeticiones, cada una con warmup de
+60 s, medición de 300 s y cooldown de 60 s (~6,5 h por perfil).
 
 ## Requisitos
 - Linux o Windows 11 con **WSL2** (Ubuntu) y **Docker** con cgroup v2. En Windows: Docker Desktop con
   *Settings → Resources → WSL integration → Ubuntu* activado y las actualizaciones automáticas desactivadas.
 - Python ≥ 3.10 con `venv` (Ubuntu: `sudo apt install python3-venv`), `curl` y `git`.
-- RAM disponible para Docker: ~6 GB para el perfil A; ~7 GB para B + C en paralelo.
+- RAM disponible para Docker/WSL: ~4,5 GB para B sola; ~7 GB para A + C en paralelo.
   En WSL2 el límite por defecto es el 50 % de la RAM del equipo (se cambia en `%USERPROFILE%\.wslconfig`).
-- ~6 GB libres en disco (dataset, volúmenes y archivos temporales de PostgreSQL).
+- Disco libre: ≥ 40 GB por suite. PostgreSQL vuelca a disco hasta ~650 MB por consulta Q1, y con
+  50 clientes eso puede llegar a decenas de GB temporales.
 
-## Correr la suite A en otra PC
+## Correr la suite B en la segunda PC
 
 Todo se ejecuta **dentro de WSL/Linux**, desde la raíz del repositorio.
 
 0. **Solo en equipos con 8 GB de RAM** (por ejemplo, la Dell Vostro 3400): WSL2 recibe por defecto la
-   mitad de la RAM (~3,8 GB), que es menos que los 4 GB del perfil A. Antes de empezar, en Windows crear
-   `%USERPROFILE%\.wslconfig` con:
+   mitad de la RAM (~3,8 GB), que no alcanza para el perfil B con el monitoreo. Antes de empezar, en
+   Windows crear `%USERPROFILE%\.wslconfig` con:
    ```ini
    [wsl2]
-   memory=6GB
-   processors=8
+   memory=5GB
    swap=2GB
    ```
    Después, en PowerShell ejecutar `wsl --shutdown`, reabrir Docker Desktop y comprobar dentro de WSL con
-   `free -h` que aparecen ~5,8 GB. Durante la ronda, Windows queda con ~2 GB: **cerrar el navegador y
-   las demás aplicaciones**.
+   `free -h` que aparecen ~4,8 GB. Durante la ronda, **cerrar el navegador y las demás aplicaciones**
+   y dejar el equipo conectado y sin suspensión.
 
 1. Clonar:
    ```bash
@@ -56,17 +57,17 @@ Todo se ejecuta **dentro de WSL/Linux**, desde la raíz del repositorio.
    cd BDN-Exp
    ```
 2. Preparar la PC. Verifica requisitos, crea el entorno virtual (`~/.venvs/bdn`), genera el dataset
-   y comprueba su sha256, carga los datos en la suite A, los valida y levanta el monitoreo (~5 min):
+   y comprueba su sha256, carga los datos en la suite B, los valida y levanta el monitoreo (~5–10 min):
    ```bash
-   scripts/setup_env.sh A
+   scripts/setup_env.sh B
    ```
-3. (Opcional, ~4 min) Prueba rápida del flujo completo con ventanas cortas; escribe solo en `results/prueba/`:
+3. (Opcional, ~4 min) Prueba rápida del flujo con ventanas cortas; escribe solo en `results/prueba/`:
    ```bash
-   scripts/run_benchmarks.sh --profile A --test --only mongodb:Q1
+   scripts/run_benchmarks.sh --profile B --test --only mongodb:Q1
    ```
-4. Correr la ronda (~6,5 h). El equipo debe estar conectado y sin suspensión:
+4. Correr la ronda (~6,5 h):
    ```bash
-   scripts/run_benchmarks.sh --profile A --round 2 2>&1 | tee results/logs/ronda2_A.log
+   scripts/run_benchmarks.sh --profile B --round 2 2>&1 | tee results/logs/ronda2_B.log
    ```
    Si se interrumpe, se vuelve a lanzar el mismo comando y continúa donde se quedó.
 5. Al terminar, entregar los resultados (ver la sección siguiente).
@@ -78,7 +79,7 @@ Cada ronda escribe en rutas propias (`*ronda2*`), así que los resultados de las
 
 ```bash
 git add results/
-git commit -m "data(results): ronda 2, perfil A"
+git commit -m "data(results): ronda 2, perfil B"
 git pull --rebase
 git push
 ```
@@ -92,7 +93,7 @@ Contiene la bitácora con el detalle de cada corrida, los errores y el control d
 | Latencias crudas (54 archivos) | `results/raw/ronda2/` | git |
 | Host, límites reales y versión del motor | `results/entorno/ronda2/` | git |
 | Evidencia de spill/OOM | `results/evidencia_spill_oom/ronda2/` | git |
-| Log de consola de la ronda | `results/logs/ronda2_A.log` | git |
+| Log de consola de la ronda | `results/logs/ronda2_B.log` | git |
 | Bitácora, errores y control de la matriz | `seguimiento/BITACORA_EJECUCION.md`, `seguimiento/ESTATUS_ERRORES.md`, `seguimiento/CONTROL_MATRIZ.md` | **enviar aparte** (zip) |
 
 Si en esa PC no hay acceso para hacer `git push`, se envían en un zip la carpeta `results/` completa
@@ -101,23 +102,22 @@ y la carpeta `seguimiento/`.
 Para comprobar que la ronda terminó completa antes de entregar:
 ```bash
 echo "filas: $(($(wc -l < results/csv/mediciones_ronda2.csv) - 1)) de 54"
-grep -E "^\| A \|" seguimiento/CONTROL_MATRIZ.md
+grep -E "^\| B \|" seguimiento/CONTROL_MATRIZ.md
 ```
-La fila del perfil A del control debe quedar sin corridas pendientes (☐ = 0).
+La fila del perfil B del control debe quedar sin corridas pendientes (☐ = 0).
 
-> **Comparabilidad:** si la ronda 2 corre en un equipo distinto al de la ronda 1, el baseline (A) y los
-> perfiles B/C se miden en hardware diferente. `results/entorno/ronda*/host.txt` registra la CPU, la RAM
-> y Docker de cada equipo para documentarlo en la sección 1 del reporte.
+> **Comparabilidad:** B se mide en un equipo distinto al de A y C. `results/entorno/ronda*/host.txt`
+> registra la CPU, la RAM y Docker de cada equipo para documentarlo en la sección 1 del reporte.
 
-## Correr la ronda 1 (B + C en paralelo)
+## Correr la ronda 1 (A + C en paralelo, PC principal)
 
-Preparar con `scripts/setup_env.sh B` y copiar los datos a C con `scripts/copy_volumes.sh B C`
-(o `scripts/setup_env.sh C`). Después, en dos terminales y con la misma `--session`:
+Preparar con `scripts/setup_env.sh A` y copiar los datos a C con `scripts/copy_volumes.sh A C`.
+Después, en dos terminales y con la misma `--session`:
 ```bash
-scripts/run_benchmarks.sh --profile B --round 1 --parties B,C --session r1
+scripts/run_benchmarks.sh --profile A --round 1 --parties A,C --session r1 2>&1 | tee results/logs/ronda1_A.log
 ```
 ```bash
-scripts/run_benchmarks.sh --profile C --round 1 --parties B,C --session r1
+scripts/run_benchmarks.sh --profile C --round 1 --parties A,C --session r1 2>&1 | tee results/logs/ronda1_C.log
 ```
 Para reanudar una ronda interrumpida se usa una sesión nueva (por ejemplo `r1b`).
 

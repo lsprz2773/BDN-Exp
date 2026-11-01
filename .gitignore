@@ -1,0 +1,15 @@
+# Documentos de trabajo locales (no forman parte del repo)
+SUMMARY.md
+ENTREGABLES.md
+PLAN_IMPLEMENTACION.md
+PROGRESS.md
+seguimiento/
+
+# Dataset generado (se reproduce con el generador y la semilla)
+data/generated/*
+!data/generated/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/

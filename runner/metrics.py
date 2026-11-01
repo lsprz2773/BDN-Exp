@@ -2,13 +2,15 @@
 
 - cpu_throttled_seconds: delta de `throttled_usec` en cpu.stat (cgroup v2) del contenedor.
 - max_rss_mb: máximo de container_memory_rss (cAdvisor vía Prometheus) en la ventana;
-  si Prometheus no responde, se usa memory.peak de la cgroup.
+  si cAdvisor no tiene la serie del contenedor, se muestrea `anon` de memory.stat cada
+  segundo (mismo valor que container_memory_rss); en último caso, memory.peak.
 - disk_spill: delta de los contadores de spill del motor (pg_stat_database.temp_bytes
   en PostgreSQL; contadores *spill* de serverStatus en MongoDB).
 - oom: delta de oom_kill en memory.events (o el contenedor dejó de correr).
 """
 import json
 import subprocess
+import threading
 import urllib.parse
 import urllib.request
 
@@ -59,8 +61,49 @@ def memory_peak_mb(nombre):
         return None
 
 
+def rss_mb(nombre):
+    """`anon` de memory.stat: el mismo valor que cAdvisor publica como container_memory_rss
+    en cgroup v2."""
+    try:
+        for linea in cgroup_file(nombre, "memory.stat").splitlines():
+            clave, valor = linea.split()
+            if clave == "anon":
+                return int(valor) / 2**20
+    except (subprocess.CalledProcessError, ValueError):
+        pass
+    return None
+
+
+class MuestreoRSS:
+    """Muestrea rss_mb cada segundo en un hilo. Respaldo para cuando cAdvisor no ve la cgroup
+    del contenedor (Docker Desktop 29.9 la anida fuera de /docker/, E-010)."""
+
+    def __init__(self, nombre, intervalo=1.0):
+        self.nombre, self.intervalo, self.maximo = nombre, intervalo, None
+        self._parar = threading.Event()
+        self._hilo = threading.Thread(target=self._bucle, daemon=True)
+
+    def _bucle(self):
+        while not self._parar.is_set():
+            v = rss_mb(self.nombre)
+            if v is not None and (self.maximo is None or v > self.maximo):
+                self.maximo = v
+            self._parar.wait(self.intervalo)
+
+    def iniciar(self):
+        self._hilo.start()
+        return self
+
+    def detener(self):
+        self._parar.set()
+        self._hilo.join(timeout=15)
+        return self.maximo
+
+
 def max_rss_mb_prometheus(cid, segundos, fin_epoch):
-    query = f'max_over_time(container_memory_rss{{id="/docker/{cid}"}}[{int(segundos)}s])'
+    # Por id y no por ruta completa: según la versión de Docker Desktop la cgroup del
+    # contenedor cuelga de /docker/ o de otro prefijo.
+    query = f'max(max_over_time(container_memory_rss{{id=~".*{cid}.*"}}[{int(segundos)}s]))'
     url = f"{PROMETHEUS}/api/v1/query?" + urllib.parse.urlencode({"query": query, "time": fin_epoch})
     try:
         with urllib.request.urlopen(url, timeout=10) as r:

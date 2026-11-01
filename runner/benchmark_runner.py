@@ -220,8 +220,12 @@ def ejecutar_corrida(perfil, motor, qid, concurrencia, rep, warmup, duracion, co
             if fallos_warmup:
                 notas.append(f"warmup: {fallos_warmup}")
 
+        muestreo = None
+        if metrics.max_rss_mb_prometheus(cid, max(warmup, 10), time.time()) is None:
+            muestreo = metrics.MuestreoRSS(nombre).iniciar()
         thr0, spill0 = metrics.throttled_seconds(nombre), leer_spill()
         m = correr_fase(clientes, duracion)
+        rss_muestreo = muestreo.detener() if muestreo else None
         estado = metrics.estado_contenedor(nombre)
         if estado["running"]:
             thr = metrics.throttled_seconds(nombre) - thr0
@@ -243,7 +247,10 @@ def ejecutar_corrida(perfil, motor, qid, concurrencia, rep, warmup, duracion, co
 
     time.sleep(2)   # deja que Prometheus raspe el final de la ventana
     rss = metrics.max_rss_mb_prometheus(cid, duracion, m.fin)
-    if rss is None:
+    if rss is None and rss_muestreo is not None:
+        rss = rss_muestreo
+        notas.append("max_rss_mb por muestreo de memory.stat anon cada 1 s (cAdvisor sin la serie)")
+    elif rss is None:
         rss = metrics.memory_peak_mb(nombre) if estado["running"] else None
         notas.append("max_rss_mb desde memory.peak (Prometheus sin dato)")
 

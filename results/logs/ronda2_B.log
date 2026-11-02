@@ -1,0 +1,66 @@
+Suite B | ronda 2 | partes ['B'] | 54 corridas | ventanas 60/300/60 s
+[1/54] B:MONGO:Q1:c1:r1 ... ok | qps=0.4233 p99=3852.0 thr=8.477 rss=753.2
+[2/54] B:MONGO:Q1:c1:r2 ... ok | qps=0.3467 p99=4510.15 thr=15.066 rss=836.0
+[3/54] B:MONGO:Q1:c1:r3 ... ok | qps=0.3867 p99=4139.79 thr=11.833 rss=871.6
+[4/54] B:MONGO:Q1:c10:r1 ... ok | qps=0.3633 p99=37110.63 thr=1814.736 rss=862.4
+[5/54] B:MONGO:Q1:c10:r2 ... ok | qps=0.16 p99=73562.72 thr=1812.17 rss=829.5
+[6/54] B:MONGO:Q1:c10:r3 ... ok | qps=0.1433 p99=74307.85 thr=1819.084 rss=827.6
+[7/54] B:MONGO:Q1:c50:r1 ... ok | qps=0.0633 p99=298752.58 thr=1812.57 rss=861.5
+[8/54] B:MONGO:Q1:c50:r2 ... ok | qps=0.15 p99=299325.78 thr=1822.395 rss=892.6
+[9/54] B:MONGO:Q1:c50:r3 ... ok | qps=0.06 p99=298953.37 thr=1818.147 rss=909.7
+[10/54] B:MONGO:Q2_DISK0:c1:r1 ... Suite B | ronda 2 | partes ['B'] | 54 corridas | ventanas 60/300/60 s
+[1/54] B:MONGO:Q1:c1:r1 ya hecha, se omite
+[2/54] B:MONGO:Q1:c1:r2 ya hecha, se omite
+[3/54] B:MONGO:Q1:c1:r3 ya hecha, se omite
+[4/54] B:MONGO:Q1:c10:r1 ya hecha, se omite
+[5/54] B:MONGO:Q1:c10:r2 ya hecha, se omite
+[6/54] B:MONGO:Q1:c10:r3 ya hecha, se omite
+[7/54] B:MONGO:Q1:c50:r1 ya hecha, se omite
+[8/54] B:MONGO:Q1:c50:r2 ya hecha, se omite
+[9/54] B:MONGO:Q1:c50:r3 ya hecha, se omite
+[10/54] B:MONGO:Q2_DISK0:c1:r1 ... ok | qps=0.5933 p99=2562.75 thr=11.056 rss=847.8
+[11/54] B:MONGO:Q2_DISK0:c1:r2 ... ok | qps=0.6 p99=2642.35 thr=11.049 rss=940.6
+[12/54] B:MONGO:Q2_DISK0:c1:r3 ... ok | qps=0.5967 p99=2773.44 thr=11.151 rss=1035.2
+[13/54] B:MONGO:Q2_DISK0:c10:r1 ... ok | qps=0.5333 p99=20937.14 thr=1528.611 rss=972.3
+[14/54] B:MONGO:Q2_DISK0:c10:r2 ... ok | qps=0.5 p99=21710.14 thr=1528.109 rss=867.4
+[15/54] B:MONGO:Q2_DISK0:c10:r3 ... ok | qps=0.5333 p99=22546.68 thr=1512.88 rss=845.4
+[16/54] B:MONGO:Q2_DISK0:c50:r1 ... ok | qps=0.3333 p99=152480.61 thr=1778.794 rss=868.5
+[17/54] B:MONGO:Q2_DISK0:c50:r2 ... ok | qps=0.32 p99=173170.88 thr=1788.12 rss=880.3
+[18/54] B:MONGO:Q2_DISK0:c50:r3 ... ok | qps=0.3333 p99=168825.62 thr=1778.084 rss=872.3
+[19/54] B:MONGO:Q2_DISK1:c1:r1 ... ok | qps=0.6033 p99=2758.66 thr=11.799 rss=874.2
+[20/54] B:MONGO:Q2_DISK1:c1:r2 ... ok | qps=0.6 p99=2835.62 thr=11.482 rss=935.4
+[21/54] B:MONGO:Q2_DISK1:c1:r3 ... ok | qps=0.5933 p99=2847.24 thr=11.64 rss=1024.1
+[22/54] B:MONGO:Q2_DISK1:c10:r1 ... ok | qps=0.5 p99=22864.7 thr=1511.567 rss=1047.7
+[23/54] B:MONGO:Q2_DISK1:c10:r2 ... ok | qps=0.5 p99=22609.03 thr=1499.963 rss=919.8
+[24/54] B:MONGO:Q2_DISK1:c10:r3 ... ok | qps=0.5333 p99=23125.25 thr=1510.617 rss=886.9
+[25/54] B:MONGO:Q2_DISK1:c50:r1 ... ok | qps=0.32 p99=172644.03 thr=1781.612 rss=872.0
+[26/54] B:MONGO:Q2_DISK1:c50:r2 ... ok | qps=0.3333 p99=168314.21 thr=1777.976 rss=872.1
+[27/54] B:MONGO:Q2_DISK1:c50:r3 ... ok | qps=0.3233 p99=169221.65 thr=1786.608 rss=881.6
+[28/54] B:PG:Q1:c1:r1 ... spill | qps=0.1833 p99=7602.34 thr=205.714 rss=108.6
+[29/54] B:PG:Q1:c1:r2 ... spill | qps=0.18 p99=7221.66 thr=192.716 rss=105.9
+[30/54] B:PG:Q1:c1:r3 ... spill | qps=0.1733 p99=7404.31 thr=170.902 rss=108.6
+[31/54] B:PG:Q1:c10:r1 ... spill | qps=0.0333 p99=177949.51 thr=883.942 rss=571.8
+[32/54] B:PG:Q1:c10:r2 ... spill | qps=0.0333 p99=168590.42 thr=779.661 rss=572.2
+[33/54] B:PG:Q1:c10:r3 ... spill | qps=0.0333 p99=184108.18 thr=700.557 rss=572.9
+[34/54] B:PG:Q1:c50:r1 ... error | qps=0.0 p99= thr=1038.22 rss=1795.8
+[35/54] B:PG:Q1:c50:r2 ... error | qps=0.0 p99= thr=1271.471 rss=1795.9
+[36/54] B:PG:Q1:c50:r3 ... error | qps=0.0 p99= thr=1264.314 rss=1790.9
+[37/54] B:PG:Q2_WM4:c1:r1 ... ok | qps=1.3567 p99=1733.28 thr=646.963 rss=20.0
+[38/54] B:PG:Q2_WM4:c1:r2 ... ok | qps=1.3867 p99=1721.41 thr=642.375 rss=20.1
+[39/54] B:PG:Q2_WM4:c1:r3 ... ok | qps=1.38 p99=1697.28 thr=634.751 rss=19.3
+[40/54] B:PG:Q2_WM4:c10:r1 ... ok | qps=0.8033 p99=21726.39 thr=1478.756 rss=46.2
+[41/54] B:PG:Q2_WM4:c10:r2 ... ok | qps=0.79 p99=22439.3 thr=1484.58 rss=42.7
+[42/54] B:PG:Q2_WM4:c10:r3 ... ok | qps=0.8267 p99=21310.87 thr=1487.008 rss=43.0
+[43/54] B:PG:Q2_WM4:c50:r1 ... ok | qps=0.7833 p99=76166.07 thr=1684.597 rss=125.5
+[44/54] B:PG:Q2_WM4:c50:r2 ... ok | qps=0.8333 p99=68681.74 thr=1641.954 rss=125.3
+[45/54] B:PG:Q2_WM4:c50:r3 ... ok | qps=0.78 p99=73180.24 thr=1671.567 rss=125.2
+[46/54] B:PG:Q2_WM64:c1:r1 ... ok | qps=1.71 p99=1480.66 thr=622.092 rss=19.5
+[47/54] B:PG:Q2_WM64:c1:r2 ... ok | qps=1.3833 p99=1543.63 thr=629.625 rss=19.6
+[48/54] B:PG:Q2_WM64:c1:r3 ... ok | qps=1.36 p99=1681.19 thr=618.702 rss=19.6
+[49/54] B:PG:Q2_WM64:c10:r1 ... ok | qps=0.7967 p99=22128.96 thr=1487.491 rss=47.2
+[50/54] B:PG:Q2_WM64:c10:r2 ... ok | qps=0.8 p99=21699.05 thr=1496.313 rss=42.9
+[51/54] B:PG:Q2_WM64:c10:r3 ... ok | qps=0.8067 p99=21726.4 thr=1484.362 rss=43.7
+[52/54] B:PG:Q2_WM64:c50:r1 ... ok | qps=0.7833 p99=73568.89 thr=1693.792 rss=125.3
+[53/54] B:PG:Q2_WM64:c50:r2 ... ok | qps=0.7833 p99=71329.35 thr=1681.46 rss=125.5
+[54/54] B:PG:Q2_WM64:c50:r3 ... ok | qps=0.8133 p99=69360.14 thr=1670.937 rss=125.9
+Fin de la suite

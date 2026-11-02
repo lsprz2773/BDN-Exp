@@ -1,0 +1,55 @@
+corrida,engine,profile,query_id,concurrency,run_number,status,throughput_qps,consultas_medidas,cpu_seconds_medicion,rss_max_mb_serie,muestras,fuente
+B:MONGO:Q1:c1:r1,mongodb,PROFILE_B_MEDIUM,Q1,1,1,ok,0.4233,127,,,0,
+B:MONGO:Q1:c1:r2,mongodb,PROFILE_B_MEDIUM,Q1,1,2,ok,0.3467,104,,,0,
+B:MONGO:Q1:c1:r3,mongodb,PROFILE_B_MEDIUM,Q1,1,3,ok,0.3867,116,,,0,
+B:MONGO:Q1:c10:r1,mongodb,PROFILE_B_MEDIUM,Q1,10,1,ok,0.3633,109,,,0,
+B:MONGO:Q1:c10:r2,mongodb,PROFILE_B_MEDIUM,Q1,10,2,ok,0.16,48,,,0,
+B:MONGO:Q1:c10:r3,mongodb,PROFILE_B_MEDIUM,Q1,10,3,ok,0.1433,43,,,0,
+B:MONGO:Q1:c50:r1,mongodb,PROFILE_B_MEDIUM,Q1,50,1,ok,0.0633,19,,,0,
+B:MONGO:Q1:c50:r2,mongodb,PROFILE_B_MEDIUM,Q1,50,2,ok,0.15,45,,,0,
+B:MONGO:Q1:c50:r3,mongodb,PROFILE_B_MEDIUM,Q1,50,3,ok,0.06,18,,,0,
+B:MONGO:Q2_DISK0:c1:r1,mongodb,PROFILE_B_MEDIUM,Q2_DISK0,1,1,ok,0.5933,178,348.568,847.8,295,cgroup (runner)
+B:MONGO:Q2_DISK0:c1:r2,mongodb,PROFILE_B_MEDIUM,Q2_DISK0,1,2,ok,0.6,180,347.113,940.6,292,cgroup (runner)
+B:MONGO:Q2_DISK0:c1:r3,mongodb,PROFILE_B_MEDIUM,Q2_DISK0,1,3,ok,0.5967,179,345.323,1035.2,291,cgroup (runner)
+B:MONGO:Q2_DISK0:c10:r1,mongodb,PROFILE_B_MEDIUM,Q2_DISK0,10,1,ok,0.5333,160,581.068,972.3,291,cgroup (runner)
+B:MONGO:Q2_DISK0:c10:r2,mongodb,PROFILE_B_MEDIUM,Q2_DISK0,10,2,ok,0.5,150,581.29,867.4,292,cgroup (runner)
+B:MONGO:Q2_DISK0:c10:r3,mongodb,PROFILE_B_MEDIUM,Q2_DISK0,10,3,ok,0.5333,160,578.627,845.4,290,cgroup (runner)
+B:MONGO:Q2_DISK0:c50:r1,mongodb,PROFILE_B_MEDIUM,Q2_DISK0,50,1,ok,0.3333,100,578.764,868.5,195,cgroup (runner)
+B:MONGO:Q2_DISK0:c50:r2,mongodb,PROFILE_B_MEDIUM,Q2_DISK0,50,2,ok,0.32,96,581.6,880.3,193,cgroup (runner)
+B:MONGO:Q2_DISK0:c50:r3,mongodb,PROFILE_B_MEDIUM,Q2_DISK0,50,3,ok,0.3333,100,579.326,872.3,190,cgroup (runner)
+B:MONGO:Q2_DISK1:c1:r1,mongodb,PROFILE_B_MEDIUM,Q2_DISK1,1,1,ok,0.6033,181,344.876,874.2,290,cgroup (runner)
+B:MONGO:Q2_DISK1:c1:r2,mongodb,PROFILE_B_MEDIUM,Q2_DISK1,1,2,ok,0.6,180,347.041,935.4,290,cgroup (runner)
+B:MONGO:Q2_DISK1:c1:r3,mongodb,PROFILE_B_MEDIUM,Q2_DISK1,1,3,ok,0.5933,178,347.703,1024.1,291,cgroup (runner)
+B:MONGO:Q2_DISK1:c10:r1,mongodb,PROFILE_B_MEDIUM,Q2_DISK1,10,1,ok,0.5,150,577.58,1047.7,290,cgroup (runner)
+B:MONGO:Q2_DISK1:c10:r2,mongodb,PROFILE_B_MEDIUM,Q2_DISK1,10,2,ok,0.5,150,577.799,919.8,289,cgroup (runner)
+B:MONGO:Q2_DISK1:c10:r3,mongodb,PROFILE_B_MEDIUM,Q2_DISK1,10,3,ok,0.5333,160,580.163,886.9,292,cgroup (runner)
+B:MONGO:Q2_DISK1:c50:r1,mongodb,PROFILE_B_MEDIUM,Q2_DISK1,50,1,ok,0.32,96,578.515,872.0,187,cgroup (runner)
+B:MONGO:Q2_DISK1:c50:r2,mongodb,PROFILE_B_MEDIUM,Q2_DISK1,50,2,ok,0.3333,100,579.54,872.1,192,cgroup (runner)
+B:MONGO:Q2_DISK1:c50:r3,mongodb,PROFILE_B_MEDIUM,Q2_DISK1,50,3,ok,0.3233,97,581.267,881.6,192,cgroup (runner)
+B:PG:Q1:c1:r1,postgresql,PROFILE_B_MEDIUM,Q1,1,1,spill,0.1833,55,385.645,108.6,292,cgroup (runner)
+B:PG:Q1:c1:r2,postgresql,PROFILE_B_MEDIUM,Q1,1,2,spill,0.18,54,374.823,105.9,294,cgroup (runner)
+B:PG:Q1:c1:r3,postgresql,PROFILE_B_MEDIUM,Q1,1,3,spill,0.1733,52,359.462,108.6,293,cgroup (runner)
+B:PG:Q1:c10:r1,postgresql,PROFILE_B_MEDIUM,Q1,10,1,spill,0.0333,10,448.818,571.8,297,cgroup (runner)
+B:PG:Q1:c10:r2,postgresql,PROFILE_B_MEDIUM,Q1,10,2,spill,0.0333,10,424.246,572.2,298,cgroup (runner)
+B:PG:Q1:c10:r3,postgresql,PROFILE_B_MEDIUM,Q1,10,3,spill,0.0333,10,404.329,572.9,296,cgroup (runner)
+B:PG:Q1:c50:r1,postgresql,PROFILE_B_MEDIUM,Q1,50,1,error,0.0,0,542.253,1795.8,213,cgroup (runner)
+B:PG:Q1:c50:r2,postgresql,PROFILE_B_MEDIUM,Q1,50,2,error,0.0,0,558.428,1795.9,181,cgroup (runner)
+B:PG:Q1:c50:r3,postgresql,PROFILE_B_MEDIUM,Q1,50,3,error,0.0,0,572.568,1790.9,223,cgroup (runner)
+B:PG:Q2_WM4:c1:r1,postgresql,PROFILE_B_MEDIUM,Q2_WM4,1,1,ok,1.3567,407,578.394,20.0,291,cgroup (runner)
+B:PG:Q2_WM4:c1:r2,postgresql,PROFILE_B_MEDIUM,Q2_WM4,1,2,ok,1.3867,416,578.525,20.1,292,cgroup (runner)
+B:PG:Q2_WM4:c1:r3,postgresql,PROFILE_B_MEDIUM,Q2_WM4,1,3,ok,1.38,414,580.692,19.3,291,cgroup (runner)
+B:PG:Q2_WM4:c10:r1,postgresql,PROFILE_B_MEDIUM,Q2_WM4,10,1,ok,0.8033,241,587.767,46.2,297,cgroup (runner)
+B:PG:Q2_WM4:c10:r2,postgresql,PROFILE_B_MEDIUM,Q2_WM4,10,2,ok,0.79,237,589.935,42.7,296,cgroup (runner)
+B:PG:Q2_WM4:c10:r3,postgresql,PROFILE_B_MEDIUM,Q2_WM4,10,3,ok,0.8267,248,585.202,43.0,295,cgroup (runner)
+B:PG:Q2_WM4:c50:r1,postgresql,PROFILE_B_MEDIUM,Q2_WM4,50,1,ok,0.7833,235,596.488,125.5,234,cgroup (runner)
+B:PG:Q2_WM4:c50:r2,postgresql,PROFILE_B_MEDIUM,Q2_WM4,50,2,ok,0.8333,250,591.889,125.3,246,cgroup (runner)
+B:PG:Q2_WM4:c50:r3,postgresql,PROFILE_B_MEDIUM,Q2_WM4,50,3,ok,0.78,234,596.603,125.2,237,cgroup (runner)
+B:PG:Q2_WM64:c1:r1,postgresql,PROFILE_B_MEDIUM,Q2_WM64,1,1,ok,1.71,513,579.35,19.5,291,cgroup (runner)
+B:PG:Q2_WM64:c1:r2,postgresql,PROFILE_B_MEDIUM,Q2_WM64,1,2,ok,1.3833,415,579.909,19.6,292,cgroup (runner)
+B:PG:Q2_WM64:c1:r3,postgresql,PROFILE_B_MEDIUM,Q2_WM64,1,3,ok,1.36,408,579.791,19.6,292,cgroup (runner)
+B:PG:Q2_WM64:c10:r1,postgresql,PROFILE_B_MEDIUM,Q2_WM64,10,1,ok,0.7967,239,588.065,47.2,296,cgroup (runner)
+B:PG:Q2_WM64:c10:r2,postgresql,PROFILE_B_MEDIUM,Q2_WM64,10,2,ok,0.8,240,588.681,42.9,296,cgroup (runner)
+B:PG:Q2_WM64:c10:r3,postgresql,PROFILE_B_MEDIUM,Q2_WM64,10,3,ok,0.8067,242,587.698,43.7,296,cgroup (runner)
+B:PG:Q2_WM64:c50:r1,postgresql,PROFILE_B_MEDIUM,Q2_WM64,50,1,ok,0.7833,235,600.122,125.3,233,cgroup (runner)
+B:PG:Q2_WM64:c50:r2,postgresql,PROFILE_B_MEDIUM,Q2_WM64,50,2,ok,0.7833,235,599.793,125.5,238,cgroup (runner)
+B:PG:Q2_WM64:c50:r3,postgresql,PROFILE_B_MEDIUM,Q2_WM64,50,3,ok,0.8133,244,596.338,125.9,245,cgroup (runner)

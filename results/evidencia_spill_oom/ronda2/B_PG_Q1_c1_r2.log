@@ -1,0 +1,55 @@
+corrida: B:PG:Q1:c1:r2
+status: spill  disk_spill: true
+notas: warmup: {'corte': 1}; spill: +47568101376 (temp_bytes); max_rss_mb por muestreo de memory.stat anon cada 1 s (cAdvisor sin la serie); fallos en medición: {'corte': 1}
+
+== memory.events
+low 0
+high 0
+max 0
+oom 0
+oom_kill 0
+oom_group_kill 0
+
+== docker logs suite_b-postgres-1 desde 2026-11-02T00:55:03Z (últimas 300 líneas de 42)
+2026-11-02 00:56:10.959 UTC [2603] ERROR:  canceling statement due to statement timeout
+2026-11-02 00:56:10.959 UTC [2603] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-02 01:01:13.740 UTC [2603] ERROR:  canceling statement due to statement timeout
+2026-11-02 01:01:13.740 UTC [2603] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-02 01:01:14.398 UTC [4986] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-02 01:01:14.398 UTC [4986] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-02 01:01:14.398 UTC [4985] FATAL:  terminating background worker "parallel worker" due to administrator command
+2026-11-02 01:01:14.398 UTC [4985] STATEMENT:  SELECT data->'contexto'->'materia'->>'nombre' AS materia,
+	       d->>'criterio' AS criterio,
+	       SUM((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS total_aporte,
+	       AVG((d->>'porcentaje')::numeric * (d->>'promedio')::numeric) AS avg_aporte,
+	       COUNT(*) AS count
+	FROM resultados_unidad, jsonb_array_elements(data->'calificacion'->'desglose') AS d
+	WHERE (d->>'promedio')::numeric > 6
+	GROUP BY 1, 2;
+	
+2026-11-02 01:01:14.422 UTC [1] LOG:  background worker "parallel worker" (PID 4986) exited with exit code 1
+2026-11-02 01:01:14.677 UTC [1] LOG:  background worker "parallel worker" (PID 4985) exited with exit code 1

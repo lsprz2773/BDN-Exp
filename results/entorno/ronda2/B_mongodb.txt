@@ -1,0 +1,8 @@
+2026-11-01 14:49:29 perfil=PROFILE_B_MEDIUM motor=mongodb
+  imagen=mongo:9.0.4 digest=sha256:452bdaf2127b8ff851e31410a267809b9829eded219979f2210e7c7efb85a058 NanoCpus=2000000000 Memory=2147483648 MemorySwap=2147483648
+  cpu.max=200000 100000 memory.max=2147483648 memory.swap.max=0
+  version=9.0.4
+2026-11-01 16:39:52 perfil=PROFILE_B_MEDIUM motor=mongodb
+  imagen=mongo:9.0.4 digest=sha256:452bdaf2127b8ff851e31410a267809b9829eded219979f2210e7c7efb85a058 NanoCpus=2000000000 Memory=2147483648 MemorySwap=2147483648
+  cpu.max=200000 100000 memory.max=2147483648 memory.swap.max=0
+  version=9.0.4

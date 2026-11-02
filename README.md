@@ -14,6 +14,46 @@ al ejecutar agregaciones JSON anidadas con límites estrictos de CPU y memoria (
 - `results/`: CSV de mediciones por ronda, latencias crudas, planes de ejecución, entorno de cada ronda y evidencia de spill/OOM
 - `report/`: reporte de métricas y figuras
 
+## Entregables
+
+Correspondencia con lo que pide el playbook de la actividad (§8) y la diapositiva de entrega.
+
+### Repositorio de código (§8.1)
+
+| Entregable | Ubicación |
+|---|---|
+| `docker-compose.yml` con perfiles de recursos parametrizados | [infra/docker-compose.yml](infra/docker-compose.yml) y [infra/profiles/](infra/profiles/) (`profile_a.env`, `profile_b.env`, `profile_c.env`) |
+| `synthetic_data_generator.py` (dataset de 500k) | [data/synthetic_data_generator.py](data/synthetic_data_generator.py), esquema en [data/ESQUEMA_DATASET.md](data/ESQUEMA_DATASET.md) |
+| `benchmark_runner` (Python) | [runner/](runner/): `benchmark_runner.py`, `run_matrix.py`, `metrics.py` |
+| `queries/` (agregaciones MongoDB y SQL PostgreSQL) | [queries/mongodb/](queries/mongodb/) (`q1.json`, `q2.json`, `schema.js`) y [queries/postgresql/](queries/postgresql/) (`q1.sql`, `q2.sql`, `schema.sql`) |
+| `run_benchmarks.sh` (automatización de la matriz) | [scripts/run_benchmarks.sh](scripts/run_benchmarks.sh) |
+
+### Evidencia
+
+| Entregable | Ubicación |
+|---|---|
+| CSV de mediciones con el esquema fijo de 14 columnas (§8.2) | [results/csv/mediciones_ronda1.csv](results/csv/mediciones_ronda1.csv) (perfiles A y C, 108 filas) y [results/csv/mediciones_ronda2.csv](results/csv/mediciones_ronda2.csv) (perfil B, 54 filas); mismo encabezado, concatenables |
+| Logs de spill/OOM | [results/evidencia_spill_oom/](results/evidencia_spill_oom/) (`ronda1/`, `ronda2/`) |
+| Planes de ejecución (`explain("executionStats")` / `EXPLAIN (ANALYZE, BUFFERS)`) | [results/explain/](results/explain/) |
+| Host, límites reales de la cgroup y versión de cada motor | [results/entorno/](results/entorno/) |
+| Latencias crudas por corrida | [results/raw/](results/raw/) |
+| Series de RSS y CPU por corrida (cada 1 s) | [results/series/](results/series/) |
+| Logs de consola de cada ronda | [results/logs/](results/logs/) |
+
+### Reporte de métricas (§8.3, 7 secciones)
+
+| Entregable | Ubicación |
+|---|---|
+| Reporte (LaTeX) | [report/reporte.tex](report/reporte.tex) |
+| Tablas consolidadas | [report/tablas/](report/tablas/) |
+| Figuras: P99 vs concurrencia, throttling vs QPS, curva RSS | [report/figures/](report/figures/) |
+| Consolidado por celda (mediana y rango de 3 repeticiones, M3) | [report/datos/consolidado.csv](report/datos/consolidado.csv) |
+
+Las tablas, figuras y el consolidado se regeneran desde `results/` con
+`~/.venvs/bdn/bin/python -I scripts/analyze_results.py`. El PDF se compila desde `report/` con
+`pdflatex reporte.tex` (dos pasadas, por las referencias) o subiendo `reporte.tex`, `tablas/` y
+`figures/` a Overleaf.
+
 ## Perfiles y rondas
 
 | Perfil | CPUs | Memoria | Ronda | Equipo |

@@ -133,8 +133,8 @@ Los perfiles se declaran en \texttt{infra/docker-compose.yml} con \texttt{cpus},
 \texttt{mem\_limit}, \texttt{mem\_swappiness: 0} y \texttt{memswap\_limit}. En cgroup~v2 la
 \emph{swappiness} por contenedor no existe y Docker la descarta, así que además se iguala
 \texttt{memswap\_limit} a \texttt{mem\_limit}, lo que deja el swap del contenedor en cero.
-Antes de cada bloque de corridas el runner registra los límites efectivos leídos de la propia
-cgroup (\texttt{results/entorno/ronda*/<perfil>\_<motor>.txt}):
+Antes de cada bloque de corridas, el programa de medición registra los límites efectivos
+leídos de la propia cgroup (\texttt{results/entorno/ronda*/<perfil>\_<motor>.txt}):
 
 \begin{table}[H]\centering\small
 \caption{Límites declarados y valores leídos de la cgroup~v2 de cada contenedor.}
@@ -150,29 +150,31 @@ C \texttt{PROFILE\_C\_SEVERE}   & 1.0 & 1024\,MB & \texttt{100000 100000} & 1\,0
 \end{tabular}
 \end{table}
 
-\noindent En cada suite solo está encendido el motor que se mide, para que la caché del
-motor inactivo no ocupe memoria del equipo.
+\noindent Cada perfil tiene su propio par de contenedores (MongoDB y PostgreSQL) con sus
+propios volúmenes de datos. Durante una corrida solo está encendido el motor que se mide, para que
+la caché del motor inactivo no ocupe memoria del equipo.
 
 % =============================================================================
 \section{Método de medición y verificación del baseline}
 \label{sec:metodo}
 
 \subsection{Dataset}
-El esquema de ejemplo del playbook (órdenes de compra) se sustituyó por la colección
+El esquema de ejemplo de la especificación de la actividad (órdenes de compra) se sustituyó por la colección
 \texttt{resultados\_unidad} de un proyecto de control académico, conservando lo que
 exige la especificación: 500\,000 documentos JSON, tres niveles de anidamiento
 (\texttt{contexto.materia.nombre}, \texttt{calificacion.desglose[].criterio}), un arreglo de
 2 a 4 elementos (promedio 3.0), un identificador UUID y una fecha ISO-8601 en formato UTC fijo.
 El generador (\texttt{data/synthetic\_data\_generator.py}) es determinista (semilla 42); el
 NDJSON resultante tiene sha256 \texttt{10a04043\ldots c429} y se carga idéntico en los dos motores.
-La correspondencia de papeles con las consultas del playbook está en la tabla~\ref{tab:mapeo}.
+La tabla~\ref{tab:mapeo} muestra qué campo cumple cada papel de las consultas de la
+especificación.
 
 \begin{table}[H]\centering\small
-\caption{Papel de cada campo frente a las consultas del playbook.}
+\caption{Campos de la especificación y campos equivalentes del dataset usado.}
 \label{tab:mapeo}
 \begin{tabular}{lll}
 \toprule
-Papel en el playbook & Campo de \texttt{orders} & Campo usado \\
+Papel en la consulta & Campo en la especificación & Campo usado \\
 \midrule
 Arreglo que se desanida (Q1) & \texttt{items[]} & \texttt{calificacion.desglose[]} \\
 Filtro numérico (Q1) & \texttt{price > 50} & \texttt{desglose.promedio > 6} \\
@@ -208,7 +210,7 @@ ORDER BY (data->'calificacion'->>'final')::numeric DESC
 LIMIT 1000;
 \end{lstlisting}
 
-\noindent La fecha se compara como texto: el cast a \texttt{timestamptz} del playbook no es
+\noindent La fecha se compara como texto: el cast a \texttt{timestamptz} de la especificación no es
 inmutable y anula el índice de expresión; con el formato UTC fijo el orden del texto es el
 cronológico y coincide con la comparación de cadenas de MongoDB. Las variantes de memoria de Q2 se
 codifican en \texttt{query\_id} para no agregar columnas al CSV: \texttt{Q2\_DISK0} /
@@ -217,21 +219,26 @@ codifican en \texttt{query\_id} para no agregar columnas al CSV: \texttt{Q2\_DIS
 
 \subsection{Protocolo}
 \begin{itemize}
-  \item \textbf{Matriz.} 2 motores $\times$ 3 perfiles $\times$ (Q1 + 2 variantes de Q2)
-        $\times$ concurrencias 1, 10 y 50 $\times$ 3 repeticiones = 162 corridas
-        (54 por perfil), cada una con una fila en el CSV de 14 columnas exactas del playbook.
+  \item \textbf{Matriz.} Una \emph{celda} es una combinación de motor, perfil, consulta y
+        concurrencia; cada celda se mide 3 veces y cada medición es una \emph{corrida}.
+        2 motores $\times$ 3 perfiles $\times$ (Q1 + 2 variantes de Q2) $\times$ concurrencias
+        1, 10 y 50 $\times$ 3 repeticiones = 162 corridas (54 por perfil), cada una con una fila
+        en el CSV de 14 columnas que fija la especificación.
   \item \textbf{Ciclo por corrida.} \texttt{sync; echo 3 > /proc/sys/vm/drop\_caches}, warmup de
         60\,s, medición de 300\,s y cooldown de 60\,s. El flush se ejecuta en un contenedor
         privilegiado, que comparte el kernel de la VM. Cada corrida duró 423--424\,s
         según los registros de ejecución (\texttt{results/logs/}).
-  \item \textbf{Suites en paralelo.} Como el flush es global del kernel, las suites A y C se
-        sincronizan con una barrera de archivos antes de cada corrida: llegan las dos, una sola
-        hace el flush y ambas arrancan el mismo segundo.
-  \item \textbf{Runner.} \texttt{runner/} en Python: un proceso por suite y los clientes
-        concurrentes como hilos con una conexión propia cada uno (pymongo 4.19, psycopg 3.3),
-        en bucle cerrado. Es una desviación menor del ``Python multiproceso'' de la
-        especificación: los drivers liberan el GIL mientras esperan a la base de datos,
-        y el runner usa $\sim$150\,MB por suite en lugar de 1--2\,GB con 50 procesos.
+  \item \textbf{Perfiles en paralelo.} Como el flush de caché afecta a todo el kernel, las
+        mediciones de A y C, que corrieron al mismo tiempo en el mismo equipo, se sincronizan
+        antes de cada corrida: cada una espera a la otra, solo una ejecuta el flush y ambas
+        arrancan en el mismo segundo. Así ninguna vacía la caché a la otra a mitad de una
+        medición.
+  \item \textbf{Programa de medición} (\emph{runner}, carpeta \texttt{runner/}, en Python).
+        Usa un proceso por perfil y simula cada cliente concurrente con un hilo que tiene su
+        propia conexión (pymongo 4.19, psycopg 3.3) y lanza una consulta tras otra sin pausa. Es
+        una desviación menor del ``Python multiproceso'' de la especificación: los drivers
+        liberan el GIL mientras esperan a la base de datos, y el programa usa $\sim$150\,MB por
+        perfil en lugar de 1--2\,GB con 50 procesos.
   \item \textbf{Ventana de medición}. Cada consulta recibe como \emph{timeout} el tiempo
         que le queda a la ventana (\texttt{maxTimeMS} / \texttt{statement\_timeout}). Latencias y
         throughput cuentan solo las consultas que empiezan y terminan dentro de los 300\,s.
@@ -242,10 +249,14 @@ codifican en \texttt{query\_id} para no agregar columnas al CSV: \texttt{Q2\_DIS
   \item \textbf{Latencia}: percentiles P50, P95 y P99 de las latencias individuales (no promedios);
         las latencias crudas de cada corrida están en \texttt{results/raw/}.
   \item \textbf{Throughput}: consultas terminadas $\div$ 300\,s.
-  \item \textbf{Throttling}: delta de \texttt{throttled\_usec} de \texttt{cpu.stat}, la misma
-        métrica que \texttt{container\_cpu\_cfs\_throttled\_seconds\_total}. Puede superar los
-        300\,s de la ventana porque el kernel suma el tiempo de cada CPU donde había hilos del
-        contenedor esperando.
+  \item \textbf{Throttling}: tiempo que el kernel detuvo al contenedor por haber agotado su
+        \emph{cuota} de CPU (el límite \texttt{cpus} del perfil). Es el delta de
+        \texttt{throttled\_usec} de \texttt{cpu.stat}, la misma métrica que
+        \texttt{container\_cpu\_cfs\_throttled\_seconds\_total}. Puede superar los 300\,s de la
+        ventana porque el kernel suma el tiempo de cada CPU donde había hilos del contenedor
+        esperando.
+  \item \textbf{CPU-s}: segundos de CPU consumidos por el contenedor en la ventana. Con la cuota
+        agotada equivalen a CPUs del perfil $\times$ 300\,s (1\,200 en A, 600 en B, 300 en C).
   \item \textbf{RSS máximo}: máximo de \texttt{container\_memory\_rss} (memoria anónima) en la
         ventana. En PostgreSQL no incluye los buffers compartidos.
   \item \textbf{Spill}: delta de \texttt{pg\_stat\_database.temp\_bytes} en PostgreSQL y de los
@@ -264,7 +275,7 @@ en \texttt{report/datos/consolidado.csv} y lo genera \texttt{scripts/analyze\_re
 
 \subsection{Verificación del baseline}
 \begin{itemize}
-  \item \textbf{Mismo dataset en todas las suites}: conteo de 500\,000 en ambos motores, índices
+  \item \textbf{Mismo dataset en todos los perfiles}: conteo de 500\,000 en ambos motores, índices
         exigidos y muestra de 25 documentos idéntica en MongoDB, PostgreSQL y el NDJSON
         (\texttt{scripts/validate\_data.py}).
   \item \textbf{Mismas consultas}: Q1 y Q2 devuelven el mismo resultado en ambos motores
@@ -273,9 +284,10 @@ en \texttt{report/datos/consolidado.csv} y lo genera \texttt{scripts/analyze\_re
   \item \textbf{Límites efectivos}: tabla~\ref{tab:limites}, leídos de la cgroup en cada corrida.
   \item \textbf{Baseline sin contención a 1 cliente}: en A, MongoDB registra 0\,s de throttling en
         Q1 y Q2 con un cliente, y la variación entre repeticiones es pequeña (Q1: 0.623--0.637\,QPS).
-  \item \textbf{Celda piloto y suites de prueba}: antes de la matriz se corrió una celda piloto y
-        una suite completa con ventanas cortas (5/20/5\,s) que validó el CSV, la barrera y la
-        detección de spill y OOM.
+  \item \textbf{Pruebas previas}: antes de la matriz se midió una celda de prueba y después
+        la matriz completa de un perfil con ventanas cortas (warmup 5\,s, medición 20\,s,
+        cooldown 5\,s). Con ellas se validaron el formato del CSV, la sincronización entre
+        perfiles en paralelo y la detección de spill y OOM.
 \end{itemize}
 
 % =============================================================================
@@ -359,8 +371,8 @@ hardware.
 \begin{figure}[H]\centering
 \includegraphics[width=\linewidth]{curva_rss_q1.pdf}
 \caption{Curva de RSS del contenedor durante Q1 (repetición 1), cada 1\,s desde Prometheus o
-desde la cgroup. La banda gris es el warmup. MongoDB en B no tiene curva: esas corridas se hicieron
-antes de que el runner guardara la serie desde la cgroup.}
+desde la cgroup. La banda gris es el warmup. MongoDB en B no tiene curva por la falta de serie descrita en
+la sección~\ref{sec:validez}.}
 \label{fig:rss}
 \end{figure}
 
@@ -409,7 +421,7 @@ Q2 & PostgreSQL & \texttt{Parallel Seq Scan} (2 workers, 500\,000 filas; no usa 
         que solo lo limita la CPU, como confirma el throttling (sección~\ref{sec:interpretacion}).
   \item \textbf{Q2}: el Top-1000 nunca necesita más de $\sim$1\,MB en ningún motor, así que las
         variantes \texttt{allowDiskUse} y \texttt{work\_mem} no cambian el plan ni el resultado.
-        El playbook pide reportar las variantes con y sin spill; en Q2 ambas resultan sin spill,
+        La especificación pide reportar las variantes con y sin spill; en Q2 ambas resultan sin spill,
         y el contraste con volcado a disco lo aporta Q1.
 \end{itemize}
 
@@ -562,22 +574,22 @@ su consulta paralela usa 3 procesos y con 2 o 1 CPU satura la cuota sola.
         al i5-13420H de 13.ª), así que su comparación con A y C mezcla el efecto del límite con el
         del hardware. Se nota con un cliente, donde B resulta a veces más lento que C. La
         comparación entre motores dentro de cada perfil sí es homogénea.
-  \item \textbf{Suites en paralelo.} A y C compartieron host; sus límites no se solapan
+  \item \textbf{Perfiles en paralelo.} A y C compartieron equipo; sus límites no se solapan
         (5 de 12 hilos, 5 de 7.6\,GB), pero comparten caché L3, memoria y disco. El disco
         compartido afecta sobre todo a PostgreSQL Q1, que escribe decenas de GB temporales por
         ventana; B, que corrió solo, muestra más uso de CPU en esa celda.
-  \item \textbf{CPU estimada en MongoDB Q1 de B.} Las 9 corridas de MongoDB Q1 en B se hicieron
-        antes de que el runner leyera la CPU directamente de la cgroup y no tienen serie de CPU
-        ni de RSS. Su M3 de CPU es una cota ($^\dagger$ en la tabla~\ref{tab:m3}); su throttling
-        y su RSS máximo sí se midieron.
+  \item \textbf{Telemetría en el equipo de B.} En ese equipo, cAdvisor no exponía las
+        métricas por contenedor, así que el programa de medición pasó a leer la CPU y el RSS
+        directamente de la cgroup de cada contenedor, con el mismo significado. Las 9 corridas
+        de MongoDB Q1, las primeras de B, se hicieron antes de ese cambio y no tienen serie de
+        CPU ni de RSS: su M3 de CPU es una cota ($^\dagger$ en la tabla~\ref{tab:m3}), mientras
+        que su throttling y su RSS máximo sí se midieron.
   \item \textbf{Ventana censurada.} Cuando una consulta dura más que la ventana, la latencia no se
         registra y el P99 subestima la cola; esas celdas se marcan \texttt{error} con 0\,QPS. Los
         CPU-s de la ventana incluyen el trabajo de consultas cortadas, lo que encarece M3 en las
         celdas saturadas (por eso M3 usa 1 cliente).
   \item \textbf{Telemetría propia.} El \emph{healthcheck} de MongoDB (\texttt{mongosh} cada 5\,s)
-        corre dentro de la cgroup y consume algo de CPU en todos los perfiles. En el equipo de B,
-        cAdvisor no veía la cgroup de los contenedores; el runner leyó RSS y CPU
-        directamente de la cgroup, con el mismo significado.
+        corre dentro de la cgroup y consume algo de CPU en todos los perfiles.
   \item \textbf{Virtualización.} WSL2 añade una capa de virtualización; el flush de caché vacía la
         page cache del kernel de la VM, no la del host Windows.
   \item \textbf{Tres repeticiones} dan un rango, no un intervalo de confianza.
@@ -589,10 +601,10 @@ su consulta paralela usa 3 procesos y con 2 o 1 CPU satura la cuota sola.
 \begin{itemize}
   \item Repositorio: \url{https://github.com/lsprz2773/BDN-Exp}. Preparación:
         \texttt{scripts/setup\_env.sh <perfil>}; ronda: \texttt{scripts/run\_benchmarks.sh
-        --profile <P> --round <N>} (con \texttt{--parties}/\texttt{--session} para suites en
-        paralelo).
+        --profile <P> --round <N>} (con \texttt{--parties} y \texttt{--session} para medir dos
+        perfiles en paralelo). Las instrucciones completas están en el \texttt{README.md}.
   \item Mediciones: \texttt{results/csv/mediciones\_ronda1.csv} y
-        \texttt{mediciones\_ronda2.csv}, con las 14 columnas del playbook, concatenables.
+        \texttt{mediciones\_ronda2.csv}, con las 14 columnas de la especificación y el mismo encabezado.
   \item Latencias crudas, series de RSS/CPU, planes, entorno y evidencia de spill/OOM en
         \texttt{results/raw}, \texttt{results/series}, \texttt{results/explain},
         \texttt{results/entorno} y \texttt{results/evidencia\_spill\_oom}.

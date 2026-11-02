@@ -25,16 +25,13 @@
 \setlist{itemsep=2pt,topsep=4pt}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible}
 
-% Marca visible para las cifras de la ronda 2 (perfil B) que faltan por integrar.
-\newcommand{\pendiente}[1]{\textcolor{red!70!black}{[pendiente: #1]}}
 \newcommand{\tablaperfil}[1]{%
-  \IfFileExists{tablas/resultados_#1.tex}{%
     \begin{table}[H]\centering\scriptsize\setlength{\tabcolsep}{3.5pt}
     \caption{Resultados consolidados del perfil #1: mediana de 3 repeticiones. Latencias en
     segundos; throttling y RSS máximo de la ventana de medición de 300\,s.}
     \label{tab:res#1}
     \input{tablas/resultados_#1.tex}
-    \end{table}}{\par\noindent\pendiente{tabla del perfil #1}\par}}
+    \end{table}}
 
 \title{\textbf{Medición de métricas en bases documentales}\\[4pt]
 \large MongoDB frente a PostgreSQL JSONB bajo contención de CPU y memoria (Docker cgroups v2)}
@@ -66,11 +63,11 @@ spill en ningún motor ni variante: ambos lo resuelven con un ordenamiento top-$
 \label{sec:host}
 
 \subsection{Equipos}
-Por la restricción de tiempo (todo en menos de 10\,h) las mediciones se repartieron en dos rondas
-simultáneas en dos equipos (decisión D-33). La ronda~1 midió los perfiles A y C \emph{en paralelo}
-en el equipo principal; la ronda~2 midió el perfil B en un segundo equipo. Así el baseline (A) y la
-contención severa (C) comparten hardware, y solo B queda en otro equipo
-(ver la sección~\ref{sec:validez}).
+Para completar la matriz en una sola jornada, las mediciones se repartieron en dos rondas
+simultáneas en dos equipos. La ronda~1 midió los perfiles A y C \emph{en paralelo}
+en el equipo principal; la ronda~2 midió el perfil B en un segundo equipo. De este modo el baseline (A) y
+la contención severa (C) comparten hardware, y solo B se midió en otro equipo
+(sección~\ref{sec:validez}).
 
 \begin{table}[H]\centering\small
 \caption{Equipos de medición (datos de \texttt{results/entorno/ronda*/host.txt}).}
@@ -98,7 +95,7 @@ Docker & Docker Desktop, Engine 29.7.2, cgroup~v2 & Docker Desktop, Engine 29.9.
         B-Tree sobre la expresión \texttt{data->>'cerrado\_en'}.
   \item Ninguno de los dos índices cubre el total del Top-K (\texttt{calificacion.final}), como
         exige la especificación.
-  \item Configuración \textbf{por defecto} en ambos motores (D-24). WiredTiger dimensiona su caché
+  \item Configuración \textbf{por defecto} en ambos motores. WiredTiger dimensiona su caché
         a partir del límite de memoria del contenedor. PostgreSQL usa \texttt{shared\_buffers} y
         \texttt{work\_mem} (4\,MB) por defecto y hasta 2 workers paralelos por consulta. Lo único
         que se cambia es \texttt{work\_mem} por sesión en las variantes de Q2.
@@ -110,7 +107,7 @@ Docker & Docker Desktop, Engine 29.7.2, cgroup~v2 & Docker Desktop, Engine 29.9.
 Los perfiles se declaran en \texttt{infra/docker-compose.yml} con \texttt{cpus},
 \texttt{mem\_limit}, \texttt{mem\_swappiness: 0} y \texttt{memswap\_limit}. En cgroup~v2 la
 \emph{swappiness} por contenedor no existe y Docker la descarta, así que además se iguala
-\texttt{memswap\_limit} a \texttt{mem\_limit}, lo que deja el swap del contenedor en cero (D-20).
+\texttt{memswap\_limit} a \texttt{mem\_limit}, lo que deja el swap del contenedor en cero.
 Antes de cada bloque de corridas el runner registra los límites efectivos leídos de la propia
 cgroup (\texttt{results/entorno/ronda*/<perfil>\_<motor>.txt}):
 
@@ -128,7 +125,7 @@ C \texttt{PROFILE\_C\_SEVERE}   & 1.0 & 1024\,MB & \texttt{100000 100000} & 1\,0
 \end{tabular}
 \end{table}
 
-\noindent En cada suite solo está encendido el motor que se mide (D-21), para que la caché del
+\noindent En cada suite solo está encendido el motor que se mide, para que la caché del
 motor inactivo no ocupe memoria del equipo.
 
 % =============================================================================
@@ -137,7 +134,7 @@ motor inactivo no ocupe memoria del equipo.
 
 \subsection{Dataset}
 El esquema de ejemplo del playbook (órdenes de compra) se sustituyó por la colección
-\texttt{resultados\_unidad} de un proyecto de control académico (D-05, D-13), conservando lo que
+\texttt{resultados\_unidad} de un proyecto de control académico, conservando lo que
 exige la especificación: 500\,000 documentos JSON, tres niveles de anidamiento
 (\texttt{contexto.materia.nombre}, \texttt{calificacion.desglose[].criterio}), un arreglo de
 2 a 4 elementos (promedio 3.0), un identificador UUID y una fecha ISO-8601 en formato UTC fijo.
@@ -146,7 +143,7 @@ NDJSON resultante tiene sha256 \texttt{10a04043\ldots c429} y se carga idéntico
 La correspondencia de papeles con las consultas del playbook está en la tabla~\ref{tab:mapeo}.
 
 \begin{table}[H]\centering\small
-\caption{Papel de cada campo frente a las consultas del playbook (D-10).}
+\caption{Papel de cada campo frente a las consultas del playbook.}
 \label{tab:mapeo}
 \begin{tabular}{lll}
 \toprule
@@ -186,10 +183,10 @@ ORDER BY (data->'calificacion'->>'final')::numeric DESC
 LIMIT 1000;
 \end{lstlisting}
 
-\noindent La fecha se compara como texto (D-15): el cast a \texttt{timestamptz} del playbook no es
+\noindent La fecha se compara como texto: el cast a \texttt{timestamptz} del playbook no es
 inmutable y anula el índice de expresión; con el formato UTC fijo el orden del texto es el
 cronológico y coincide con la comparación de cadenas de MongoDB. Las variantes de memoria de Q2 se
-codifican en \texttt{query\_id} para no agregar columnas al CSV (D-06): \texttt{Q2\_DISK0} /
+codifican en \texttt{query\_id} para no agregar columnas al CSV: \texttt{Q2\_DISK0} /
 \texttt{Q2\_DISK1} (\texttt{allowDiskUse} false / true) en MongoDB y \texttt{Q2\_WM4} /
 \texttt{Q2\_WM64} (\texttt{work\_mem} 4\,MB / 64\,MB) en PostgreSQL.
 
@@ -200,17 +197,17 @@ codifican en \texttt{query\_id} para no agregar columnas al CSV (D-06): \texttt{
         (54 por perfil), cada una con una fila en el CSV de 14 columnas exactas del playbook.
   \item \textbf{Ciclo por corrida.} \texttt{sync; echo 3 > /proc/sys/vm/drop\_caches}, warmup de
         60\,s, medición de 300\,s y cooldown de 60\,s. El flush se ejecuta en un contenedor
-        privilegiado, que comparte el kernel de la VM (D-28). Cada corrida duró 423--424\,s
-        según la bitácora.
+        privilegiado, que comparte el kernel de la VM. Cada corrida duró 423--424\,s
+        según los registros de ejecución (\texttt{results/logs/}).
   \item \textbf{Suites en paralelo.} Como el flush es global del kernel, las suites A y C se
         sincronizan con una barrera de archivos antes de cada corrida: llegan las dos, una sola
-        hace el flush y ambas arrancan el mismo segundo (D-07, D-29).
+        hace el flush y ambas arrancan el mismo segundo.
   \item \textbf{Runner.} \texttt{runner/} en Python: un proceso por suite y los clientes
         concurrentes como hilos con una conexión propia cada uno (pymongo 4.19, psycopg 3.3),
         en bucle cerrado. Es una desviación menor del ``Python multiproceso'' de la
-        especificación (D-11): los drivers liberan el GIL mientras esperan a la base de datos,
+        especificación: los drivers liberan el GIL mientras esperan a la base de datos,
         y el runner usa $\sim$150\,MB por suite en lugar de 1--2\,GB con 50 procesos.
-  \item \textbf{Ventana de medición} (D-26). Cada consulta recibe como \emph{timeout} el tiempo
+  \item \textbf{Ventana de medición}. Cada consulta recibe como \emph{timeout} el tiempo
         que le queda a la ventana (\texttt{maxTimeMS} / \texttt{statement\_timeout}). Latencias y
         throughput cuentan solo las consultas que empiezan y terminan dentro de los 300\,s.
 \end{itemize}
@@ -223,9 +220,9 @@ codifican en \texttt{query\_id} para no agregar columnas al CSV (D-06): \texttt{
   \item \textbf{Throttling}: delta de \texttt{throttled\_usec} de \texttt{cpu.stat}, la misma
         métrica que \texttt{container\_cpu\_cfs\_throttled\_seconds\_total}. Puede superar los
         300\,s de la ventana porque el kernel suma el tiempo de cada CPU donde había hilos del
-        contenedor esperando (D-30).
+        contenedor esperando.
   \item \textbf{RSS máximo}: máximo de \texttt{container\_memory\_rss} (memoria anónima) en la
-        ventana. En PostgreSQL no incluye los buffers compartidos (D-27).
+        ventana. En PostgreSQL no incluye los buffers compartidos.
   \item \textbf{Spill}: delta de \texttt{pg\_stat\_database.temp\_bytes} en PostgreSQL y de los
         contadores de spill de \texttt{serverStatus} en MongoDB.
   \item \textbf{OOM}: delta de \texttt{oom\_kill} en \texttt{memory.events} del contenedor.
@@ -236,8 +233,8 @@ codifican en \texttt{query\_id} para no agregar columnas al CSV (D-06): \texttt{
 \end{itemize}
 
 \subsection{Resumen de repeticiones}
-Cada celda se resume con la \textbf{mediana} de sus 3 repeticiones y el mínimo y máximo como rango
-(D-08): con tres valores, una corrida atípica mueve mucho la media. El consolidado completo está
+Cada celda se resume con la \textbf{mediana} de sus 3 repeticiones y el mínimo y máximo como rango:
+con tres valores, una corrida atípica desplaza mucho la media. El consolidado completo está
 en \texttt{report/datos/consolidado.csv} y lo genera \texttt{scripts/analyze\_results.py}.
 
 \subsection{Verificación del baseline}
@@ -247,8 +244,7 @@ en \texttt{report/datos/consolidado.csv} y lo genera \texttt{scripts/analyze\_re
         (\texttt{scripts/validate\_data.py}).
   \item \textbf{Mismas consultas}: Q1 y Q2 devuelven el mismo resultado en ambos motores
         (\texttt{scripts/check\_queries.py}); en Q1 las sumas se comparan con tolerancia relativa
-        de $10^{-9}$ porque MongoDB suma en \emph{double} y PostgreSQL en \texttt{numeric}
-        (D-18), y en Q2 se compara la lista ordenada de totales por los empates (D-16).
+        de $10^{-9}$ porque MongoDB suma en \emph{double} y PostgreSQL en \texttt{numeric}, y en Q2 se compara la lista ordenada de totales por los empates.
   \item \textbf{Límites efectivos}: tabla~\ref{tab:limites}, leídos de la cgroup en cada corrida.
   \item \textbf{Baseline sin contención a 1 cliente}: en A, MongoDB registra 0\,s de throttling en
         Q1 y Q2 con un cliente, y la variación entre repeticiones es pequeña (Q1: 0.623--0.637\,QPS).
@@ -268,7 +264,7 @@ cuenta las 3 repeticiones; ``--'' indica que ninguna consulta terminó dentro de
 \tablaperfil{B}
 \tablaperfil{C}
 
-\paragraph{Lectura rápida.}
+\paragraph{Observaciones principales.}
 \begin{itemize}
   \item \textbf{Q1 en MongoDB} pasa de un P99 de 1.6\,s (A) a 2.3\,s (C) con un cliente, y de
         34.9\,s a 113.3\,s con 10 clientes. Con 50 clientes, A sostiene 0.30\,QPS con un P99 de
@@ -339,7 +335,7 @@ hardware.
 \includegraphics[width=\linewidth]{curva_rss_q1.pdf}
 \caption{Curva de RSS del contenedor durante Q1 (repetición 1), cada 1\,s desde Prometheus o
 desde la cgroup. La banda gris es el warmup. MongoDB en B no tiene curva: esas corridas se hicieron
-antes de que el runner guardara la serie desde la cgroup (E-010).}
+antes de que el runner guardara la serie desde la cgroup.}
 \label{fig:rss}
 \end{figure}
 
@@ -380,16 +376,16 @@ Q2 & PostgreSQL & \texttt{Parallel Seq Scan} (2 workers, 500\,000 filas; no usa 
 \begin{itemize}
   \item \textbf{Q1 en PostgreSQL}: con el \texttt{work\_mem} por defecto, un ordenamiento de
         $\sim$650\,MB obliga a usar disco. El volumen temporal de una consulta en el plan
-        ($\approx$1.5\,GB) cuadra con lo medido: 42.5\,GB en una ventana de A con un cliente, que
+        ($\approx$1.5\,GB) es coherente con lo medido: 42.5\,GB en una ventana de A con un cliente, que
         terminó 48 consultas ($\approx$0.9\,GB por consulta, más las que quedaron a medias). La
         mala estimación de grupos lleva al planificador a ordenar en lugar de usar un
         \texttt{HashAggregate} de 180 grupos.
   \item \textbf{Q1 en MongoDB}: el pipeline procesa en flujo y su agrupación ocupa kilobytes, así
         que solo lo limita la CPU, como confirma el throttling (sección~\ref{sec:interpretacion}).
   \item \textbf{Q2}: el Top-1000 nunca necesita más de $\sim$1\,MB en ningún motor, así que las
-        variantes \texttt{allowDiskUse} y \texttt{work\_mem} no cambian el plan ni el resultado
-        (D-17). Es el riesgo que el playbook ya anticipaba (``sin spill y con spill''): aquí ambas
-        variantes resultan sin spill, y el contraste de spill lo aporta Q1.
+        variantes \texttt{allowDiskUse} y \texttt{work\_mem} no cambian el plan ni el resultado.
+        El playbook pide reportar las variantes con y sin spill; en Q2 ambas resultan sin spill,
+        y el contraste con volcado a disco lo aporta Q1.
 \end{itemize}
 
 % =============================================================================
@@ -404,8 +400,8 @@ Q2 & PostgreSQL & \texttt{Parallel Seq Scan} (2 workers, 500\,000 filas; no usa 
         de 11.3 a 51.9\,s ($\times$4.6), porque en C sus workers paralelos y su I/O temporal
         compiten por un solo núcleo.
   \item \textbf{Con concurrencia} el P99 lo dominan la cola y el throttling. Con 10 clientes la
-        cuota se agota en ambos perfiles (A: 1\,200\,CPU-s de 1\,200 posibles; C: 300 de 300) y el
-        P99 crece en proporción al número de clientes por núcleo.
+        cuota se agota en los tres perfiles (A: 1\,200\,CPU-s de 1\,200 posibles; B: $\sim$580
+        de 600; C: 300 de 300) y el P99 crece en proporción al número de clientes por núcleo.
   \item \textbf{P95 y P99 quedan casi pegados} cuando el sistema está saturado, como en MongoDB Q1
         con 10 clientes en C (P95 113.2\,s, P99 113.3\,s): todas las consultas esperan lo mismo y
         la cola de la distribución desaparece. La degradación se ve también en el P50.
@@ -413,9 +409,9 @@ Q2 & PostgreSQL & \texttt{Parallel Seq Scan} (2 workers, 500\,000 filas; no usa 
         con 1\,GB y 50 clientes el contenedor muere (28 \texttt{oom\_kill} en 3 repeticiones).
   \item \textbf{En B} el efecto con concurrencia es intermedio entre A y C: el P99 de MongoDB Q1
         con 10 clientes es 73.6\,s (34.9 en A, 113.3 en C) y el de PostgreSQL Q2 con 10 clientes,
-        21.7\,s (13.9 en A, 44.1 en C). Con un cliente B no es
-        intermedio porque su equipo tiene núcleos más lentos; la comparación limpia del efecto del
-        límite es A frente a C, en el mismo hardware.
+        21.7\,s (13.9 en A, 44.1 en C). Con un cliente B no es intermedio porque su
+        equipo tiene núcleos más lentos; la comparación que aísla el efecto del límite es A frente
+        a C, medidos en el mismo hardware.
 \end{itemize}
 
 \subsection*{M2. ¿Qué motor gestiona mejor los buffers antes de spill u OOM?}
@@ -426,9 +422,8 @@ Q2 & PostgreSQL & \texttt{Parallel Seq Scan} (2 workers, 500\,000 filas; no usa 
   \item \textbf{PostgreSQL vuelca a disco en todas las corridas de Q1} que llegan a ejecutar
         consultas: el ordenamiento de filas completas no cabe en 4\,MB de \texttt{work\_mem}.
         Escribe 6.7--7.1\,GB por ventana en C, 13.5--47.6\,GB en B y 22.9--42.5\,GB en A, y con
-        50 backends en 1\,GB
-        termina en OOM: cada backend y sus workers reservan memoria propia para ordenar y
-        destostar JSONB, y la suma rebasa el límite.
+        50 backends en 1\,GB termina en OOM: cada backend y sus workers reservan memoria propia
+        para ordenar y descomprimir (\emph{detoast}) el JSONB, y la suma rebasa el límite.
   \item \textbf{En el Top-K (Q2) los dos gestionan bien el buffer.} Ambos usan un ordenamiento
         top-$k$ acotado (1.09\,MB en MongoDB, 272\,KB por proceso en PostgreSQL), muy por debajo
         de \texttt{memLimit} (100\,MB) y de \texttt{work\_mem} (4\,MB). Ninguna de las 108
@@ -436,7 +431,7 @@ Q2 & PostgreSQL & \texttt{Parallel Seq Scan} (2 workers, 500\,000 filas; no usa 
 \end{itemize}
 
 \subsection*{M3. Huella de CPU y memoria por cada 1\,000 documentos}
-Según D-09:
+Se definen como:
 \[
 \text{CPU-s}/1000 = \frac{\text{CPU-s de la ventana}}{\text{consultas terminadas}\times 500\,000}\times 1000,
 \qquad
@@ -449,7 +444,7 @@ cgroup (\texttt{results/series/}).
 
 \begin{table}[H]\centering\small
 \caption{M3 con un cliente: CPU-s y MB de RSS por cada 1\,000 documentos (mediana de 3
-repeticiones). $^\dagger$ Estimado: sin serie de CPU para esa celda (E-010), se usa la cuota del
+repeticiones). $^\dagger$ Estimado: sin serie de CPU para esa celda, se usa la cuota del
 perfil o el consumo de la misma celda en A, el menor de los dos.}
 \label{tab:m3}
 \input{tablas/m3.tex}
@@ -466,7 +461,7 @@ perfil o el consumo de la misma celda en A, el menor de los dos.}
         valor de MongoDB Q1 en B (0.0056) es una cota superior estimada.
   \item \textbf{Memoria}: el RSS de MongoDB (1.3--2.0\,MB por 1\,000 documentos) incluye su caché
         WiredTiger, que vive en memoria anónima. El de PostgreSQL (0.03--0.2\,MB) no incluye
-        \texttt{shared\_buffers}, que es memoria compartida (D-27). Las cifras de memoria no son
+        \texttt{shared\_buffers}, que es memoria compartida. Las cifras de memoria no son
         un costo marginal por consulta, sino la huella del proceso con el límite dado.
 \end{itemize}
 
@@ -474,7 +469,7 @@ perfil o el consumo de la misma celda en A, el menor de los dos.}
 Con 10 o más clientes ambos motores consumen casi exactamente su cuota de CPU (1\,200\,CPU-s en A,
 600 en B y 300 en C por ventana), y el throttling acumulado va de 1\,850 a 3\,280\,s en A y C y de
 1\,480 a 1\,820\,s en B. Es más que la ventana porque se suma por cada CPU en la que había hilos
-esperando (D-30). La excepción es PostgreSQL Q1, con menos de 400\,s de throttling en A y C: no
+esperando. La excepción es PostgreSQL Q1, con menos de 400\,s de throttling en A y C: no
 espera CPU sino disco temporal. En B llega a 780--1\,264\,s (sección~\ref{sec:graficas}).
 PostgreSQL Q2 sufre throttling incluso con un cliente (137\,s en A, 642 en B, 958 en C), porque
 su consulta paralela usa 3 procesos y con 2 o 1 CPU satura la cuota sola.
@@ -495,7 +490,7 @@ su consulta paralela usa 3 procesos y con 2 o 1 CPU satura la cuota sola.
         perfiles y concurrencias; OOM en PostgreSQL Q1, perfil C, 50 clientes. MongoDB y Q2 sin
         spill (tabla~\ref{tab:spill}, evidencia en \texttt{results/evidencia\_spill\_oom/}).
   \item \textbf{¿Cuántas repeticiones y cómo se resumen?} 3 por celda, mediana con rango
-        mínimo--máximo (D-08).
+        mínimo--máximo.
   \item \textbf{¿El plan respalda el cuello de botella?} Sí: el external merge de PostgreSQL Q1
         explica su spill y su bajo uso de CPU; el pipeline en flujo de MongoDB explica que solo lo
         limite la CPU; el top-$k$ de ambos explica la ausencia de spill en Q2
@@ -540,23 +535,23 @@ su consulta paralela usa 3 procesos y con 2 o 1 CPU satura la cuota sola.
 \begin{itemize}
   \item \textbf{Equipos distintos.} B se midió en otro equipo (i5-1135G7 de 11.ª generación frente
         al i5-13420H de 13.ª), así que su comparación con A y C mezcla el efecto del límite con el
-        del hardware (D-32). Se nota con un cliente, donde B resulta a veces más lento que C. La
+        del hardware. Se nota con un cliente, donde B resulta a veces más lento que C. La
         comparación entre motores dentro de cada perfil sí es homogénea.
   \item \textbf{Suites en paralelo.} A y C compartieron host; sus límites no se solapan
         (5 de 12 hilos, 5 de 7.6\,GB), pero comparten caché L3, memoria y disco. El disco
         compartido afecta sobre todo a PostgreSQL Q1, que escribe decenas de GB temporales por
         ventana; B, que corrió solo, muestra más uso de CPU en esa celda.
   \item \textbf{CPU estimada en MongoDB Q1 de B.} Las 9 corridas de MongoDB Q1 en B se hicieron
-        antes del ajuste del runner para E-010 y no tienen serie de CPU ni de RSS; su M3 de CPU
-        es una cota ($^\dagger$ en la tabla~\ref{tab:m3}) y su throttling y RSS máximo sí se
-        midieron.
+        antes de que el runner leyera la CPU directamente de la cgroup y no tienen serie de CPU
+        ni de RSS. Su M3 de CPU es una cota ($^\dagger$ en la tabla~\ref{tab:m3}); su throttling
+        y su RSS máximo sí se midieron.
   \item \textbf{Ventana censurada.} Cuando una consulta dura más que la ventana, la latencia no se
         registra y el P99 subestima la cola; esas celdas se marcan \texttt{error} con 0\,QPS. Los
         CPU-s de la ventana incluyen el trabajo de consultas cortadas, lo que encarece M3 en las
         celdas saturadas (por eso M3 usa 1 cliente).
   \item \textbf{Telemetría propia.} El \emph{healthcheck} de MongoDB (\texttt{mongosh} cada 5\,s)
         corre dentro de la cgroup y consume algo de CPU en todos los perfiles. En el equipo de B,
-        cAdvisor no veía la cgroup de los contenedores (E-010); el runner leyó RSS y CPU
+        cAdvisor no veía la cgroup de los contenedores; el runner leyó RSS y CPU
         directamente de la cgroup, con el mismo significado.
   \item \textbf{Virtualización.} WSL2 añade una capa de virtualización; el flush de caché vacía la
         page cache del kernel de la VM, no la del host Windows.

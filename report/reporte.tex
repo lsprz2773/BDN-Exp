@@ -6,7 +6,9 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[spanish,es-tabla,es-nodecimaldot]{babel}
+% es-noshorthands: sin él, babel convierte < y > en atajos y rompe el código como data->>'campo'.
+\usepackage[spanish,es-tabla,es-nodecimaldot,es-noshorthands]{babel}
+\usepackage{amsmath}
 \usepackage{lmodern}
 \usepackage[margin=2.2cm]{geometry}
 \usepackage{graphicx}
@@ -23,6 +25,8 @@
 \graphicspath{{figures/}}
 \captionsetup{font=small,labelfont=bf}
 \setlist{itemsep=2pt,topsep=4pt}
+% Permite estirar el espacio entre palabras antes que sacar del margen rutas y nombres largos.
+\setlength{\emergencystretch}{3em}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible}
 
 \newcommand{\tablaperfil}[1]{%
@@ -39,6 +43,7 @@
 
 \begin{document}
 
+\hypersetup{pageanchor=false}
 \begin{titlepage}
 \centering
 {\LARGE\bfseries Universidad Politécnica de Chiapas\par}
@@ -64,6 +69,7 @@
 \vfill
 {\large 1 de noviembre de 2026\par}
 \end{titlepage}
+\hypersetup{pageanchor=true}
 
 \begin{abstract}
 \noindent Se comparan MongoDB~9.0.4 y PostgreSQL~18.6 (JSONB) al ejecutar dos agregaciones sobre
@@ -97,7 +103,7 @@ la contención severa (C) comparten hardware, y solo B se midió en otro equipo
 \begin{table}[H]\centering\small
 \caption{Equipos de medición (datos de \texttt{results/entorno/ronda*/host.txt}).}
 \label{tab:host}
-\begin{tabularx}{\linewidth}{lXX}
+\begin{tabularx}{\linewidth}{l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X}
 \toprule
  & Ronda 1 (perfiles A y C) & Ronda 2 (perfil B) \\
 \midrule
@@ -169,7 +175,7 @@ NDJSON resultante tiene sha256 \texttt{10a04043\ldots c429} y se carga idéntico
 La tabla~\ref{tab:mapeo} muestra qué campo cumple cada papel de las consultas de la
 especificación.
 
-\begin{table}[H]\centering\small
+\begin{table}[H]\centering\footnotesize
 \caption{Campos de la especificación y campos equivalentes del dataset usado.}
 \label{tab:mapeo}
 \begin{tabular}{lll}

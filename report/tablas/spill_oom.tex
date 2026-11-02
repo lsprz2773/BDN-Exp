@@ -1,0 +1,13 @@
+\begin{tabular}{llrlrr}
+\toprule
+Perfil & Motor / query & Conc. & Estado (3 rep.) & Spill (GB/ventana) & oom\_kill \\
+\midrule
+A & PostgreSQL Q1 & 1 & 3\,spill & 42.5 & 0 \\
+A & PostgreSQL Q1 & 10 & 3\,spill & 22.9 & 0 \\
+A & PostgreSQL Q1 & 50 & 3\,error & 33.5 & 0 \\
+C & MongoDB Q1 & 50 & 3\,error & -- & 0 \\
+C & PostgreSQL Q1 & 1 & 3\,spill & 6.7 & 0 \\
+C & PostgreSQL Q1 & 10 & 3\,error & 7.1 & 0 \\
+C & PostgreSQL Q1 & 50 & 3\,oom & -- & 28 \\
+\bottomrule
+\end{tabular}

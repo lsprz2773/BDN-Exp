@@ -1,0 +1,314 @@
+corrida: C:PG:Q1:c50:r2
+status: oom  disk_spill: 
+notas: warmup: {'error': 4543, 'corte': 28}; oom_kill en el contenedor: 5; fallos en medición: {'error': 25573}; OperationalError: connection failed: connection to server at "127.0.0.1", port 54303 failed: FATAL:  the database system is not yet accepting connections
+DETAIL:  Consistent recovery state has not been yet reached.; ninguna consulta terminó dentro de la ventana
+
+== memory.events
+low 0
+high 0
+max 694173
+oom 832
+oom_kill 14
+oom_group_kill 0
+
+== docker logs suite_c-postgres-1 desde 2026-11-01T23:01:57Z (últimas 300 líneas de 31749)
+2026-11-01 23:08:17.462 UTC [64245] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.464 UTC [64246] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.468 UTC [64247] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.469 UTC [64248] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.471 UTC [64249] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.472 UTC [64250] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.475 UTC [64251] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.484 UTC [64252] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.485 UTC [64253] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.486 UTC [64254] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.488 UTC [64255] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.488 UTC [64256] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.489 UTC [64260] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.491 UTC [64259] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.491 UTC [64258] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.492 UTC [64257] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.567 UTC [64263] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.569 UTC [64266] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.569 UTC [64269] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.569 UTC [64262] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.570 UTC [64264] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.571 UTC [64271] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.571 UTC [64270] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.571 UTC [64273] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.572 UTC [64267] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.572 UTC [64265] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.572 UTC [64261] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.573 UTC [64268] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.574 UTC [64272] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.577 UTC [64274] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.578 UTC [64275] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.676 UTC [64276] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.677 UTC [64277] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.678 UTC [64278] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.682 UTC [64279] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.812 UTC [64280] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.824 UTC [64281] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.829 UTC [64282] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.830 UTC [64283] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.839 UTC [64284] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.844 UTC [64285] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.877 UTC [64286] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.878 UTC [64287] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.880 UTC [64288] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.886 UTC [64289] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.947 UTC [64290] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.959 UTC [64291] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.962 UTC [64292] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.964 UTC [64293] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.965 UTC [64294] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.970 UTC [64295] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.971 UTC [64296] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.973 UTC [64297] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.973 UTC [64298] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.976 UTC [64299] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.986 UTC [64300] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.987 UTC [64301] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.989 UTC [64302] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.991 UTC [64303] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.993 UTC [64304] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.994 UTC [64307] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.995 UTC [64306] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.995 UTC [64305] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:17.995 UTC [64308] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.071 UTC [64309] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.073 UTC [64310] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.078 UTC [64318] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.079 UTC [64317] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.079 UTC [64312] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.079 UTC [64314] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.081 UTC [64320] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.082 UTC [64311] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.084 UTC [64315] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.085 UTC [64321] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.085 UTC [64323] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.087 UTC [64322] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.087 UTC [64319] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.087 UTC [64313] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.087 UTC [64316] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.179 UTC [64324] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.182 UTC [64325] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.183 UTC [64326] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.189 UTC [64327] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.315 UTC [64328] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.327 UTC [64329] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.331 UTC [64330] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.336 UTC [64331] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.341 UTC [64332] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.345 UTC [64333] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.379 UTC [64334] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.380 UTC [64335] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.383 UTC [64336] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.388 UTC [64337] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.451 UTC [64338] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.461 UTC [64339] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.463 UTC [64340] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.466 UTC [64341] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.467 UTC [64342] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.471 UTC [64343] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.473 UTC [64344] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.475 UTC [64345] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.475 UTC [64346] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.477 UTC [64347] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.488 UTC [64348] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.488 UTC [64349] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.491 UTC [64350] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.493 UTC [64351] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.496 UTC [64352] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.496 UTC [64354] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.497 UTC [64353] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.498 UTC [64355] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.498 UTC [64356] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.574 UTC [64357] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.575 UTC [64358] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.582 UTC [64359] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.583 UTC [64360] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.585 UTC [64361] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.586 UTC [64362] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.588 UTC [64363] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.588 UTC [64365] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.590 UTC [64366] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.590 UTC [64364] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.591 UTC [64368] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.592 UTC [64367] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.592 UTC [64369] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.593 UTC [64370] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.593 UTC [64371] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.684 UTC [64372] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.687 UTC [64373] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.688 UTC [64374] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.694 UTC [64375] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.819 UTC [64376] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.829 UTC [64377] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.834 UTC [64378] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.839 UTC [64379] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.843 UTC [64380] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.848 UTC [64381] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.882 UTC [64382] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.882 UTC [64383] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.885 UTC [64384] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.889 UTC [64385] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.955 UTC [64386] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.964 UTC [64387] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.965 UTC [64388] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.977 UTC [64390] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.977 UTC [64389] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:18.986 UTC [64391] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.000 UTC [64395] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.006 UTC [1] LOG:  issuing SIGKILL to recalcitrant children
+2026-11-01 23:08:19.059 UTC [64401] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.060 UTC [64402] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.060 UTC [64403] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.061 UTC [64404] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.065 UTC [1] LOG:  all server processes terminated; reinitializing
+2026-11-01 23:08:19.096 UTC [64408] LOG:  database system was interrupted; last known up at 2026-11-01 23:08:08 UTC
+2026-11-01 23:08:19.096 UTC [64411] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.097 UTC [64412] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.098 UTC [64414] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.098 UTC [64413] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.099 UTC [64415] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.100 UTC [64419] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.100 UTC [64417] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.100 UTC [64418] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.100 UTC [64421] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.101 UTC [64423] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.101 UTC [64422] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.102 UTC [64420] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.103 UTC [64416] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.104 UTC [64424] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.104 UTC [64425] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.191 UTC [64426] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.197 UTC [64427] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.197 UTC [64428] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.199 UTC [64429] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.326 UTC [64430] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.339 UTC [64431] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.343 UTC [64432] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.349 UTC [64433] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.353 UTC [64434] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.354 UTC [64435] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.385 UTC [64436] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.386 UTC [64437] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.387 UTC [64438] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.391 UTC [64439] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.460 UTC [64440] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.466 UTC [64441] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.469 UTC [64442] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.494 UTC [64443] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.506 UTC [64444] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.513 UTC [64445] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.516 UTC [64446] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.517 UTC [64447] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.526 UTC [64449] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.527 UTC [64450] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.528 UTC [64448] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.530 UTC [64453] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.532 UTC [64451] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.535 UTC [64452] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.565 UTC [64455] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.567 UTC [64457] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.567 UTC [64458] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.567 UTC [64454] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.568 UTC [64456] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.569 UTC [64459] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.571 UTC [64460] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.599 UTC [64461] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.600 UTC [64462] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.601 UTC [64463] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.602 UTC [64464] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.606 UTC [64465] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.607 UTC [64467] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.607 UTC [64468] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.609 UTC [64466] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.609 UTC [64472] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.611 UTC [64470] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.611 UTC [64473] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.611 UTC [64471] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.612 UTC [64475] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.613 UTC [64469] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.613 UTC [64474] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.698 UTC [64476] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.701 UTC [64477] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.703 UTC [64478] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.707 UTC [64479] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.831 UTC [64480] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.842 UTC [64481] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.848 UTC [64482] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.853 UTC [64483] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.856 UTC [64484] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.857 UTC [64485] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.889 UTC [64486] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.889 UTC [64487] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.891 UTC [64488] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.894 UTC [64489] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.968 UTC [64490] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.969 UTC [64491] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.972 UTC [64492] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:19.998 UTC [64493] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.010 UTC [64494] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.015 UTC [64495] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.018 UTC [64496] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.020 UTC [64497] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.032 UTC [64498] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.032 UTC [64499] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.034 UTC [64500] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.035 UTC [64501] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.036 UTC [64502] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.037 UTC [64503] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.071 UTC [64505] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.071 UTC [64504] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.073 UTC [64506] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.073 UTC [64507] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.073 UTC [64508] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.074 UTC [64509] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.075 UTC [64510] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.102 UTC [64511] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.104 UTC [64512] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.105 UTC [64513] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.116 UTC [64519] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.118 UTC [64514] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.121 UTC [64517] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.121 UTC [64515] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.121 UTC [64516] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.123 UTC [64520] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.123 UTC [64524] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.123 UTC [64521] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.127 UTC [64518] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.128 UTC [64523] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.130 UTC [64526] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.130 UTC [64522] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.172 UTC [64532] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.200 UTC [64533] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.205 UTC [64534] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.206 UTC [64535] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.209 UTC [64536] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.338 UTC [64537] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.345 UTC [64538] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.351 UTC [64539] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.355 UTC [64540] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.358 UTC [64541] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.360 UTC [64542] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.393 UTC [64543] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.395 UTC [64544] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.396 UTC [64545] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.397 UTC [64546] FATAL:  the database system is in recovery mode
+2026-11-01 23:08:20.451 UTC [64408] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-11-01 23:08:20.464 UTC [64408] LOG:  redo starts at 0/5B9D3518
+2026-11-01 23:08:20.464 UTC [64408] LOG:  invalid record length at 0/5B9D3550: expected at least 24, got 0
+2026-11-01 23:08:20.464 UTC [64408] LOG:  redo done at 0/5B9D3518 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-11-01 23:08:20.474 UTC [64547] FATAL:  the database system is not yet accepting connections
+2026-11-01 23:08:20.474 UTC [64547] DETAIL:  Consistent recovery state has not been yet reached.
+2026-11-01 23:08:20.476 UTC [64548] FATAL:  the database system is not yet accepting connections
+2026-11-01 23:08:20.476 UTC [64548] DETAIL:  Consistent recovery state has not been yet reached.
+2026-11-01 23:08:20.481 UTC [64549] FATAL:  the database system is not yet accepting connections
+2026-11-01 23:08:20.481 UTC [64549] DETAIL:  Consistent recovery state has not been yet reached.
+2026-11-01 23:08:20.489 UTC [64409] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-11-01 23:08:20.499 UTC [64550] FATAL:  the database system is not yet accepting connections
+2026-11-01 23:08:20.499 UTC [64550] DETAIL:  Consistent recovery state has not been yet reached.
+2026-11-01 23:08:20.539 UTC [64409] LOG:  checkpoint complete: wrote 0 buffers (0.0%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.012 s, sync=0.006 s, total=0.060 s; sync files=2, longest=0.003 s, average=0.003 s; distance=0 kB, estimate=0 kB; lsn=0/5B9D3550, redo lsn=0/5B9D3550
+2026-11-01 23:08:20.571 UTC [1] LOG:  database system is ready to accept connections

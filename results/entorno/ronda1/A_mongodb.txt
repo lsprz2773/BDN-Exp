@@ -1,0 +1,4 @@
+2026-11-01 13:00:58 perfil=PROFILE_A_BASELINE motor=mongodb
+  imagen=mongo:9.0.4 digest=sha256:452bdaf2127b8ff851e31410a267809b9829eded219979f2210e7c7efb85a058 NanoCpus=4000000000 Memory=4294967296 MemorySwap=4294967296
+  cpu.max=400000 100000 memory.max=4294967296 memory.swap.max=0
+  version=9.0.4

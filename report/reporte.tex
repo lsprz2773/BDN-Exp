@@ -611,8 +611,10 @@ su consulta paralela usa 3 procesos y con 2 o 1 CPU satura la cuota sola.
         \texttt{scripts/setup\_env.sh <perfil>}; ronda: \texttt{scripts/run\_benchmarks.sh
         --profile <P> --round <N>} (con \texttt{--parties} y \texttt{--session} para medir dos
         perfiles en paralelo). Las instrucciones completas están en el \texttt{README.md}.
-  \item Mediciones: \texttt{results/csv/mediciones\_ronda1.csv} y
-        \texttt{mediciones\_ronda2.csv}, con las 14 columnas de la especificación y el mismo encabezado.
+  \item Mediciones: \texttt{results/csv/mediciones.csv}, con las 162 corridas y las 14 columnas
+        de la especificación, ordenadas por perfil, motor, consulta, concurrencia y repetición.
+        Se forma con los archivos de cada ronda, \texttt{mediciones\_ronda1.csv} (perfiles A y C)
+        y \texttt{mediciones\_ronda2.csv} (perfil B), que se conservan en la misma carpeta.
   \item Latencias crudas, series de RSS/CPU, planes, entorno y evidencia de spill/OOM en
         \texttt{results/raw}, \texttt{results/series}, \texttt{results/explain},
         \texttt{results/entorno} y \texttt{results/evidencia\_spill\_oom}.

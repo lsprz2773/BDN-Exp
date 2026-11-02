@@ -295,7 +295,12 @@ def fig_throttling(celdas, perfiles):
         ax.set_xlabel("Tiempo de throttling CFS en la ventana (s)")
         ax.set_title(titulo, loc="left", color=TINTA)
     axes[0].set_ylabel("Throughput (QPS, escala log)")
-    leyenda(axes[1], perfiles, loc="upper right")
+    # Leyenda fuera de los ejes: con tres perfiles tapa las etiquetas c50 de Q2.
+    h = [Line2D([], [], color=COLOR[m], lw=2, label=NOMBRE_MOTOR[m]) for m in MOTORES]
+    h += [Line2D([], [], color=TINTA2, marker=MARCA[p], ls=TRAZO[p], label=f"Perfil {p}")
+          for p in perfiles]
+    fig.subplots_adjust(bottom=0.27, wspace=0.25)
+    fig.legend(handles=h, loc="lower center", ncol=len(h), fontsize=8, bbox_to_anchor=(0.5, 0.0))
     guardar(fig, "throttling_vs_qps")
 
 

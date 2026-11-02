@@ -35,7 +35,8 @@ Correspondencia con lo que pide el playbook de la actividad (§8).
 
 | Entregable | Ubicación |
 |---|---|
-| CSV de mediciones con el esquema fijo de 14 columnas (§8.2) | [results/csv/mediciones_ronda1.csv](results/csv/mediciones_ronda1.csv) (perfiles A y C, 108 filas) y [results/csv/mediciones_ronda2.csv](results/csv/mediciones_ronda2.csv) (perfil B, 54 filas); mismo encabezado, concatenables |
+| **CSV de mediciones** con el esquema fijo de 14 columnas (§8.2) | [results/csv/mediciones.csv](results/csv/mediciones.csv): las 162 corridas, ordenadas por perfil (A, B, C), motor, consulta, concurrencia y repetición |
+| CSV por ronda (origen del anterior) | [results/csv/mediciones_ronda1.csv](results/csv/mediciones_ronda1.csv) (perfiles A y C, 108 filas) y [results/csv/mediciones_ronda2.csv](results/csv/mediciones_ronda2.csv) (perfil B, 54 filas) |
 | Logs de spill/OOM | [results/evidencia_spill_oom/](results/evidencia_spill_oom/) (`ronda1/`, `ronda2/`) |
 | Planes de ejecución (`explain("executionStats")` / `EXPLAIN (ANALYZE, BUFFERS)`) | [results/explain/](results/explain/) |
 | Host, límites reales de la cgroup y versión de cada motor | [results/entorno/](results/entorno/) |
